@@ -4,7 +4,8 @@
   </div>
 
   <ul>
-    <li><a href=''>Dashboard</a></li>
+    <li><a href='{% url "quoman:dashboard" %}'>Dashboard</a></li>
+    <li><a href='{% url "products:list" %}'>Productos</a></li>
 
     <li><a href='{% url "users:logout" %}'>Salir</a></li>
   </ul>

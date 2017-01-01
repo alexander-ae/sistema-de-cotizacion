@@ -1,0 +1,32 @@
+{% extends 'common/_base.html' %}
+
+{% block content %}
+
+  <h1>Productos</h1>
+
+  <a href='{% url "products:new" %}'>Crear Producto</a>
+
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>SKU</th>
+        <th>Nombre</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {% for producto in lista_productos %}
+      <tr>
+        <td>{{ forloop.counter }}</td>
+        <td><a href='{{ producto.get_absolute_url }}'>{{ producto.sku|upper }}</a></td>
+        <td>{{ producto.nombre }}</td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan='3'>No hay productos registrados</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock content %}
