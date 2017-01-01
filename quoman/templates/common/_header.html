@@ -1,0 +1,11 @@
+{% if request.user.is_authenticated %}
+  <div>
+    <p>Usuario: {{ request.user }}</p>
+  </div>
+
+  <ul>
+    <li><a href=''>Dashboard</a></li>
+    <li><a href=''>Salir</a></li>
+  </ul>
+
+{% endif %}

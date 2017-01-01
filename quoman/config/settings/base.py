@@ -23,6 +23,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'quoman',
     'users',
 ]
 
@@ -71,7 +72,6 @@ DATABASES = {
 }
 
 
-# Password validation
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
     'users.backend.AuthBackend',
@@ -92,6 +92,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+
+LOGIN_URL = '/ingresar/'
 
 # Internationalization
 

@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'common/_base.html' %}
 
 {% block content %}
 
@@ -13,6 +13,8 @@
                 {{ field.errors }}
             </div>
         {% endfor %}
+
+        {{ form.non_field_errors }}
 
         <button>Enviar</button>
     </form>
