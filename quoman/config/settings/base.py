@@ -5,7 +5,7 @@ Django settings for quoman project.
 
 import os
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 SECRET_KEY = '+w1yetx28u#otrl$n3anjj#*^64n9()ueu)_2$=%_l1y78z5by'
 
@@ -41,7 +41,9 @@ ROOT_URLCONF = 'config.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'templates'),
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -70,6 +72,10 @@ DATABASES = {
 
 
 # Password validation
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'users.backend.AuthBackend',
+]
 
 AUTH_PASSWORD_VALIDATORS = [
     {
