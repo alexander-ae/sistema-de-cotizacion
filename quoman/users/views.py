@@ -1,4 +1,5 @@
 from django.contrib.auth import login
+from django.contrib.auth.views import logout_then_login
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect
@@ -39,3 +40,7 @@ def login_view(request):
         form = LoginForm()
 
     return render(request, 'users/login.html', locals())
+
+
+def logout_view(request):
+    return logout_then_login(request)
