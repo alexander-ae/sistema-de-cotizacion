@@ -1,10 +1,11 @@
 {% if request.user.is_authenticated %}
   <div>
-    <p>Usuario: {{ request.user }}</p>
+    <p>Usuario: <a href='{% url "users:profile" %}'>{{ request.user }}</a></p>
   </div>
 
   <ul>
     <li><a href=''>Dashboard</a></li>
+
     <li><a href='{% url "users:logout" %}'>Salir</a></li>
   </ul>
 
