@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     'quoman',
     'users',
     'products',
+    'quotes',
 ]
 
 MIDDLEWARE = [

@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.urlresolvers import reverse
 
+
 class Product(models.Model):
     sku = models.CharField('SKU', max_length=32, unique=True,
                            help_text='Identificador único')

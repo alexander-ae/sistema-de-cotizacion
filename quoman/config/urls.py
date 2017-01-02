@@ -8,4 +8,6 @@ urlpatterns = [
     url(r'', include('quoman.urls', namespace='quoman')),
     url(r'', include('users.urls', namespace='users')),
     url(r'^productos/', include('products.urls', namespace='products')),
+    url(r'^cotizaciones/', include('quotes.urls', namespace='quotes')),
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,0 +1,38 @@
+{% extends 'common/_base.html' %}
+
+{% block content %}
+
+  <h1>Cotizaciones</h1>
+
+  <a href='{% url "quotes:new" %}'>Nueva cotización</a>
+
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Código</th>
+        <th>Propietario</th>
+        <th>Estado</th>
+        <th>RUC</th>
+        <th>Válida hasta</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {% for cotizacion in lista_cotizaciones %}
+      <tr>
+        <td>{{ forloop.counter }}</td>
+        <td><a href='{{ cotizacion.get_absolute_url }}'>{{ cotizacion.codigo|upper }}</a></td>
+        <td>{{ cotizacion.propietario_id.userprofile.full_name }}</td>
+        <td>{{ cotizacion.get_estado_display }}</td>
+        <td>{{ cotizacion.ruc }}</td>
+        <td>{% if requestcotizacion.valida_hasta %}{{ cotizacion.valida_hasta }} {% else %} - {% endif %}</td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan='6'>No hay cotizaciones registradas</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock content %}

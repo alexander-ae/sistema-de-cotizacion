@@ -1,0 +1,22 @@
+{% extends 'common/_base.html' %}
+
+{% block content %}
+
+    <h1>Producto {% if producto %}Edición{% else %}Registro{% endif %}</h1>
+
+    <form action='#' method='POST' enctype='multipart/form-data'>
+        {%  csrf_token %}
+        {% for field in form %}
+            <div>
+                {{ field.label_tag }}
+                {{ field }}
+                {{ field.errors }}
+            </div>
+        {% endfor %}
+
+        {{ form.non_field_errors }}
+
+        <button>Enviar</button>
+    </form>
+
+{% endblock content %}
