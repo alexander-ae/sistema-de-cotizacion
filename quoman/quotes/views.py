@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
 
 from .models import Quote
-from .forms import QuoteForm, QuoteReceiverFormSet
+from .forms import QuoteForm, QuoteReceiverFormSet, QuoteProductFormSet
 
 
 @login_required
@@ -42,10 +42,12 @@ def quotes_edit(request, codigo):
     if request.method == 'POST':
         form = QuoteForm(request.POST, request.FILES, instance=cotizacion)
         quoteReceiverFormSet = QuoteReceiverFormSet(request.POST, instance=cotizacion)
+        quoteProductFormSet = QuoteProductFormSet(request.POST, instance=cotizacion)
 
-        if form.is_valid() and quoteReceiverFormSet.is_valid():
+        if form.is_valid() and quoteReceiverFormSet.is_valid() and quoteProductFormSet.is_valid():
             form.save()
             quoteReceiverFormSet.save()
+            quoteProductFormSet.save()
 
             messages.add_message(request, messages.SUCCESS, 'Se actualizó la cotización')
             return redirect(cotizacion.get_absolute_url())
@@ -53,5 +55,6 @@ def quotes_edit(request, codigo):
     else:
         form = QuoteForm(instance=cotizacion)
         quoteReceiverFormSet = QuoteReceiverFormSet(instance=cotizacion)
+        quoteProductFormSet = QuoteProductFormSet(instance=cotizacion)
 
     return render(request, 'quotes/new_edit.html', locals())

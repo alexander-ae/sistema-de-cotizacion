@@ -7,6 +7,9 @@
   <form action='#' method='POST' enctype='multipart/form-data'>
     {% csrf_token %}
     {{ quoteReceiverFormSet.management_form }}
+    {{ quoteProductFormSet.management_form }}
+
+
     <fieldset>
       {% for field in form %}
         <div>
@@ -17,6 +20,20 @@
       {% endfor %}
 
       {{ form.non_field_errors }}
+    </fieldset>
+
+    <fieldset>
+      <legend>Productos</legend>
+      <ul id='formset-productos'>
+        {% for form in quoteProductFormSet %}
+          {{ form.id }}
+          <li>
+            {{ form.as_ul }}
+          </li>
+        {% endfor %}
+      </ul>
+
+      <button id='btnProducto'>Añadir Producto</button>
     </fieldset>
 
     <fieldset>
@@ -39,12 +56,17 @@
 
 
 {% block js %}
+  <script type='template/productos'>
+    {{ quoteProductFormSet.empty_form.as_ul }}
+  </script>
+
   <script type='template/destinatarios'>
     {{ quoteReceiverFormSet.empty_form.as_ul }}
   </script>
 
   <script>
       $(function () {
+          // cotizaciones
           var $totalDestinatarios = $('#id_quotereceiver_set-TOTAL_FORMS');
 
           $('#btnDestinatario').click(function (event) {
@@ -54,6 +76,18 @@
               clon_html = replaceAll(clon, '__prefix__', (total).toString());
               $('#formset-destinatarios').append(clon_html);
               $totalDestinatarios.val(total + 1);
+          });
+
+          // productos
+          var $totalProductos = $('#id_quoteproduct_set-TOTAL_FORMS');
+
+          $('#btnProducto').click(function (event) {
+              event.preventDefault();
+              var total = parseInt($totalProductos.val(), 10);
+              var clon = $('script[type="template/productos"]').html();
+              clon_html = replaceAll(clon, '__prefix__', (total).toString());
+              $('#formset-productos').append(clon_html);
+              $totalProductos.val(total + 1);
           });
       })
   </script>

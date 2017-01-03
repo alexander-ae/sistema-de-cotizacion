@@ -13,5 +13,5 @@ class Config(models.Model):
         verbose_name = 'Configuración'
         verbose_name_plural = 'Configuración'
 
-    def __unicode__(self):
+    def __str__(self):
         return 'Configuración'
