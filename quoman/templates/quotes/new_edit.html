@@ -2,21 +2,59 @@
 
 {% block content %}
 
-    <h1>Producto {% if producto %}Edición{% else %}Registro{% endif %}</h1>
+  <h1>Producto {% if producto %}Edición{% else %}Registro{% endif %}</h1>
 
-    <form action='#' method='POST' enctype='multipart/form-data'>
-        {%  csrf_token %}
-        {% for field in form %}
-            <div>
-                {{ field.label_tag }}
-                {{ field }}
-                {{ field.errors }}
-            </div>
+  <form action='#' method='POST' enctype='multipart/form-data'>
+    {% csrf_token %}
+    {{ quoteReceiverFormSet.management_form }}
+    <fieldset>
+      {% for field in form %}
+        <div>
+          {{ field.label_tag }}
+          {{ field }}
+          {{ field.errors }}
+        </div>
+      {% endfor %}
+
+      {{ form.non_field_errors }}
+    </fieldset>
+
+    <fieldset>
+      <legend>Destinatarios</legend>
+      <ul id='formset-destinatarios'>
+        {% for form in quoteReceiverFormSet %}
+          {{ form.id }}
+          <li>
+            {{ form.as_ul }}
+          </li>
         {% endfor %}
+      </ul>
 
-        {{ form.non_field_errors }}
+      <button id='btnDestinatario'>Añadir Destinatario</button>
+    </fieldset>
 
-        <button>Enviar</button>
-    </form>
-
+    <button>Enviar</button>
+  </form>
 {% endblock content %}
+
+
+{% block js %}
+  <script type='template/destinatarios'>
+    {{ quoteReceiverFormSet.empty_form.as_ul }}
+  </script>
+
+  <script>
+      $(function () {
+          var $totalDestinatarios = $('#id_quotereceiver_set-TOTAL_FORMS');
+
+          $('#btnDestinatario').click(function (event) {
+              event.preventDefault();
+              var total = parseInt($totalDestinatarios.val(), 10);
+              var clon = $('script[type="template/destinatarios"]').html();
+              clon_html = replaceAll(clon, '__prefix__', (total).toString());
+              $('#formset-destinatarios').append(clon_html);
+              $totalDestinatarios.val(total + 1);
+          });
+      })
+  </script>
+{% endblock js %}

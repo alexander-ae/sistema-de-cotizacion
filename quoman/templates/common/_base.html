@@ -1,7 +1,9 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
     <head>
         <title>QuoMan</title>
+        <script src='{% static "js/jquery-3.1.1.min.js" %}'></script>
     </head>
 
     <body>
@@ -11,5 +13,9 @@
 
         {% block content %}
         {% endblock content %}
+
+        <script src="{% static 'js/utils.js' %}"></script>
+        {% block js %}
+        {% endblock js %}
     </body>
 </html>

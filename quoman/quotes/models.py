@@ -30,3 +30,23 @@ class Quote(models.Model):
 
     def get_absolute_url(self):
         return reverse('quotes:edit', kwargs={'codigo': self.codigo})
+
+
+
+class QuoteReceiver(models.Model):
+    quote = models.ForeignKey(Quote, verbose_name='', on_delete=models.CASCADE)
+    nombres = models.CharField('Nombres', max_length=64, blank=True)
+    email = models.EmailField('Email')
+
+    class Meta:
+        verbose_name = 'Destinatario de la cotización'
+        verbose_name_plural = 'Destinatarios de la cotización'
+
+    def __unicode__(self):
+        return self.email
+
+    def full_email(self):
+        if self.nombres:
+            return '{}<{}>'.format(self.nombres, self.email)
+
+        return self.email
