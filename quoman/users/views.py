@@ -7,10 +7,10 @@ from django.shortcuts import render, redirect
 
 from .forms import LoginForm
 from .forms import UserProfileForm
+from .forms import PasswordUpdateForm
 
 
 def login_view(request):
-
     if request.user.is_authenticated():
         return redirect(reverse('quoman:dashboard'))
 
@@ -32,10 +32,10 @@ def login_view(request):
                     return redirect(reverse('quoman:dashboard'))
                 else:
                     messages.add_message(request, messages.WARNING,
-                        'El usuario no se encuentra activo')
+                                         'El usuario no se encuentra activo')
             else:
                 messages.add_message(request, messages.WARNING,
-                        'El email y contraseña son inválidos')
+                                     'El email y contraseña son inválidos')
         else:
             messages.add_message(request, messages.WARNING, 'Error de formulario')
     else:
@@ -50,7 +50,6 @@ def logout_view(request):
 
 @login_required
 def profile(request):
-
     user_profile = request.user.userprofile
 
     if request.method == 'POST':
@@ -58,8 +57,28 @@ def profile(request):
 
         if form.is_valid():
             form.save()
-            messages.add_message(request, messages.SUCCESS, 'Perfil Actualizado')
+            messages.add_message(request, messages.SUCCESS, 'Perfil actualizado')
     else:
         form = UserProfileForm(instance=user_profile)
 
     return render(request, 'users/profile.html', locals())
+
+
+@login_required
+def update_password(request):
+    user = request.user
+
+    if request.method == 'POST':
+        form = PasswordUpdateForm(request.POST)
+
+        if form.is_valid():
+            old_password = form.cleaned_data.get('old_password')
+            if user.check_password(old_password):
+                form.update_password(user)
+                messages.add_message(request, messages.SUCCESS, 'Contraseña actualizada')
+            else:
+                messages.add_message(request, messages.ERROR, 'La contraseña actual no coincide')
+    else:
+        form = PasswordUpdateForm()
+
+    return render(request, 'users/password_update.html', locals())

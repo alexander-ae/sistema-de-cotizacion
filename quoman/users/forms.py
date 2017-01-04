@@ -28,3 +28,13 @@ class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
         fields = ('email', 'nombres', 'apellidos', 'telefono')
+
+
+class PasswordUpdateForm(forms.Form):
+    old_password = forms.CharField(label='Antigua Contraseña', widget=forms.PasswordInput)
+    new_password = forms.CharField(label='Nueva Contraseña', widget=forms.PasswordInput, min_length=6)
+
+    def update_password(self, user):
+        new_password = self.cleaned_data.get('new_password')
+        user.set_password(new_password)
+        user.save()
