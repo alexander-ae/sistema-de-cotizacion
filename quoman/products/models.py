@@ -21,3 +21,6 @@ class Product(models.Model):
 
     def get_absolute_url(self):
         return reverse('products:edit', kwargs={'sku': self.sku})
+
+    def get_api_detail_url(self):
+        return reverse('products:api_detail', kwargs={'id': self.id})

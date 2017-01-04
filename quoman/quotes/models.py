@@ -57,8 +57,7 @@ class QuoteReceiver(models.Model):
 class QuoteProduct(models.Model):
     quote = models.ForeignKey(Quote, verbose_name='Cotización')
     producto = models.ForeignKey(Product, verbose_name='Producto', blank=True, null=True)
-    sku = models.CharField('SKU', max_length=32, unique=True,
-                           help_text='Identificador único')
+    sku = models.CharField('SKU', max_length=32, help_text='Identificador único')
     nombre = models.CharField('Nombre', max_length=64)
     detalle = models.TextField('Detalle', blank=True)
     precio = models.DecimalField('Precio', max_digits=12, decimal_places=2,
@@ -69,6 +68,7 @@ class QuoteProduct(models.Model):
     class Meta:
         verbose_name = 'Producto a cotizar'
         verbose_name_plural = 'Productos a cotizar'
+        unique_together = ('quote', 'sku')
 
     def __str__(self):
         return self.sku

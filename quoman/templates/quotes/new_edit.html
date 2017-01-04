@@ -24,14 +24,14 @@
 
     <fieldset>
       <legend>Productos</legend>
-      <ul id='formset-productos'>
+      <div id='formset-productos'>
         {% for form in quoteProductFormSet %}
-          {{ form.id }}
-          <li>
+          <div class='product_inline'>
+            {{ form.id }}
             {{ form.as_ul }}
-          </li>
+          </div>
         {% endfor %}
-      </ul>
+      </div>
 
       <button id='btnProducto'>Añadir Producto</button>
     </fieldset>
@@ -57,7 +57,9 @@
 
 {% block js %}
   <script type='template/productos'>
-    {{ quoteProductFormSet.empty_form.as_ul }}
+    <div class='product_inline'>
+      {{ quoteProductFormSet.empty_form.as_ul }}
+    </div>
   </script>
 
   <script type='template/destinatarios'>
@@ -89,6 +91,29 @@
               $('#formset-productos').append(clon_html);
               $totalProductos.val(total + 1);
           });
+
+          // cambio de un producto
+          $('body').on('change', '.product_inline .producto', function (ev) {
+              ev.preventDefault();
+              console.log('cambio');
+              var _this = $(this),
+                  _id = _this.val(),
+                  _parent = _this.closest('.product_inline');
+
+              if(!_id){
+                  return;
+              }
+
+              $.ajax({
+                  url: '/productos/api/' + _id + '/?format=json',
+              })
+              .done(function (data) {
+                  _parent.find('.sku').val(data.sku);
+                  _parent.find('.nombre').val(data.nombre);
+                  _parent.find('.detalle').val(data.detalle);
+                  _parent.find('.precio').val(data.precio);
+              });
+          })
       })
   </script>
 {% endblock js %}

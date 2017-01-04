@@ -14,5 +14,18 @@ class QuoteForm(forms.ModelForm):
 QuoteReceiverFormSet = inlineformset_factory(Quote, QuoteReceiver, extra=0, can_delete=True,
                                              fields=('nombres', 'email'))
 
-QuoteProductFormSet = inlineformset_factory(Quote, QuoteProduct, extra=0, can_delete=True,
-                                             fields=('producto', 'sku', 'nombre', 'detalle', 'precio', 'cantidad'))
+class QuoteProductForm(forms.ModelForm):
+    class Meta:
+        model = QuoteProduct
+        fields = ('producto', 'sku', 'nombre', 'detalle', 'precio', 'cantidad')
+
+    def __init__(self, *args, **kwargs):
+        super(QuoteProductForm, self).__init__(*args, **kwargs)
+        self.fields['producto'].widget.attrs.update({'class': 'producto'})
+        self.fields['sku'].widget.attrs.update({'class': 'sku'})
+        self.fields['nombre'].widget.attrs.update({'class': 'nombre'})
+        self.fields['detalle'].widget.attrs.update({'class': 'detalle'})
+        self.fields['precio'].widget.attrs.update({'class': 'precio'})
+
+QuoteProductFormSet = inlineformset_factory(Quote, QuoteProduct, form=QuoteProductForm, extra=0, can_delete=True)
+                                             #fields=('producto', 'sku', 'nombre', 'detalle', 'precio', 'cantidad'))
