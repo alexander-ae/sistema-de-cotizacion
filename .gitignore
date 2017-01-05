@@ -90,3 +90,4 @@ ENV/
 
 .idea/
 quoman/media
+/quoman/config/settings/settings.json

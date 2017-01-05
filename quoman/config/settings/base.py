@@ -4,10 +4,13 @@ Django settings for quoman project.
 """
 
 import os
+from ..utils import get_env
+
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+ENV = get_env(BASE_DIR)
 
-SECRET_KEY = '+w1yetx28u#otrl$n3anjj#*^64n9()ueu)_2$=%_l1y78z5by'
+SECRET_KEY = ENV.get('SECRET_KEY')
 
 DEBUG = True
 
@@ -67,13 +70,18 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'cotiza',
-        'HOST': 'localhost',
-        'USER': 'demo',
-        'PASSWORD': 'demo'
+        'NAME': ENV.get('DATABASE_NAME'),
+        'HOST': ENV.get('DATABASE_HOST'),
+        'USER': ENV.get('DATABASE_USER'),
+        'PASSWORD': ENV.get('DATABASE_PASSWORD'),
     }
 }
 
+EMAIL_HOST = ENV.get('EMAIL_HOST')
+EMAIL_HOST_USER = ENV.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = ENV.get('EMAIL_HOST_PASSWORD')
+DEFAULT_FROM_EMAIL = ENV.get('DEFAULT_FROM_EMAIL')
+SERVER_EMAIL = ENV.get('SERVER_EMAIL')
 
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',

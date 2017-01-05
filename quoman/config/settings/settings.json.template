@@ -1,0 +1,8 @@
+{
+  "DATABASE_NAME": "",
+  "DATABASE_HOST": "",
+  "DATABASE_USER": "",
+  "DATABASE_PASSWORD": "",
+
+  "SECRET_KEY": "",
+}
