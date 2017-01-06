@@ -1,21 +1,28 @@
 {% load static %}
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>QuoMan</title>
-        <script src='{% static "js/jquery-3.1.1.min.js" %}'></script>
-    </head>
+<head>
+  <title>QuoMan</title>
 
-    <body>
-        {% include 'common/_messages.html' %}
+  <link rel='stylesheet' href='{% static "bootstrap/css/bootstrap.min.css" %}'>
+  <link rel='stylesheet' href='{% static "adminlte/css/AdminLTE.min.css" %}'>
+  <link rel='stylesheet' href='{% static "adminlte/css/skin-blue-light.min.css" %}'>
+</head>
 
-        {% include 'common/_header.html' %}
+<body>
+{% include 'common/_messages.html' %}
 
-        {% block content %}
-        {% endblock content %}
+{% include 'common/_header.html' %}
 
-        <script src="{% static 'js/utils.js' %}"></script>
-        {% block js %}
-        {% endblock js %}
-    </body>
+{% block content %}
+{% endblock content %}
+
+<script src='{% static "js/jquery-3.1.1.min.js" %}'></script>
+<script src='{% static "bootstrap/js/bootstrap.min.js" %}'></script>
+
+<script src='{% static "js/utils.js" %}'></script>
+
+{% block js %}
+{% endblock js %}
+</body>
 </html>
