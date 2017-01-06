@@ -1,3 +1,4 @@
+import uuid
 from django.contrib.auth.models import User
 from django.db import models
 
@@ -11,6 +12,7 @@ class UserProfile(models.Model):
     nombres = models.CharField('Nombres', max_length=64)
     apellidos = models.CharField('Apellidos', max_length=64)
     telefono = models.CharField('Teléfono', max_length=32, blank=True)
+    uuid = models.UUIDField('UUID', default=uuid.uuid4, editable=False)
 
     class Meta:
         verbose_name = 'Perfil'

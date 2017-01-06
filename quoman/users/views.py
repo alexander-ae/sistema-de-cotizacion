@@ -8,6 +8,9 @@ from django.shortcuts import render, redirect
 from .forms import LoginForm
 from .forms import UserProfileForm
 from .forms import PasswordUpdateForm
+from .forms import RecoverPasswordForm
+from .forms import SetPasswordForm
+from users.models import UserProfile
 
 
 def login_view(request):
@@ -82,3 +85,38 @@ def update_password(request):
         form = PasswordUpdateForm()
 
     return render(request, 'users/password_update.html', locals())
+
+
+def forget_password(request):
+    """ Pantalla para recuperar la contraseña """
+
+    if request.method == 'POST':
+        form = RecoverPasswordForm(request.POST)
+
+        if form.is_valid():
+            form.send_mail()
+            messages.add_message(request, messages.SUCCESS, 'Se le enviaron las intrucciones por correo')
+            return redirect('users:login')
+    else:
+        form = RecoverPasswordForm()
+
+    return render(request, 'users/recover_password.html', locals())
+
+
+def set_password(request, profile_id, uuid):
+
+    if request.method == 'POST':
+        form = SetPasswordForm(request.POST)
+        if form.is_valid():
+            form.save()
+            form.send_mail()
+            messages.add_message(request, messages.SUCCESS, 'Contraseña actualizada correctamente')
+            return redirect(reverse('users:login'))
+    else:
+        try:
+            user = UserProfile.objects.get(uuid=uuid, id=profile_id)
+        except UserProfile.DoesNotExist:
+            user = None
+        form = SetPasswordForm(initial={'email': user.email, 'uuid': uuid})
+
+    return render(request, 'users/set_password.html', locals())

@@ -14,5 +14,10 @@ class UserAdmin(BaseUserAdmin):
     inlines = (UserProfileInline,)
 
 
+@admin.register(UserProfile)
+class UserProfileAdmin(admin.ModelAdmin):
+    list_display = ('email', 'uuid')
+
+
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)

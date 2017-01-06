@@ -7,6 +7,8 @@ import os
 from ..utils import get_env
 
 
+PROJECT_NAME = 'Sistema de cotizaciones'
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 ENV = get_env(BASE_DIR)
 
@@ -15,9 +17,8 @@ SECRET_KEY = ENV.get('SECRET_KEY')
 DEBUG = True
 
 ALLOWED_HOSTS = []
+SITE_URL = ENV.get('SITE_URL')
 
-
-# Application definition
 
 INSTALLED_APPS = [
     'django.contrib.admin',

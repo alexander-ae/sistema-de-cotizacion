@@ -89,5 +89,6 @@ ENV/
 .ropeproject
 
 .idea/
+.directory
 quoman/media
 /quoman/config/settings/settings.json
