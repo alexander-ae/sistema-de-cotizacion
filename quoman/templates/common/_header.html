@@ -35,11 +35,17 @@
     <div class='sidebar'>
 
       <ul class='nav sidebar-menu'>
-        <li><a href='{% url "quoman:dashboard" %}'>Dashboard</a></li>
-        <li><a href='{% url "products:list" %}'>Productos</a></li>
-        <li><a href='{% url "quotes:list" %}'>Cotizaciones</a></li>
+        <li><a href='{% url "quoman:dashboard" %}'><i class="fa fa-home" aria-hidden="true"></i>Dashboard</a></li>
+        <li><a href='{% url "products:list" %}'><i class="fa fa-wrench" aria-hidden="true"></i>
+          Productos</a></li>
+        <li><a href='{% url "quotes:list" %}'><i class="fa fa-table" aria-hidden="true"></i>Cotizaciones</a></li>
 
-        <li><a href='{% url "users:logout" %}'>Salir</a></li>
+        <li>
+          <a href='{% url "users:logout" %}'>
+            <i class='fa fa-sign-out' aria-hidden='true'></i>
+            Salir
+          </a>
+        </li>
       </ul>
 
     </div>

@@ -1,26 +1,30 @@
 {% extends 'common/_base.html' %}
+{% load crispy_forms_tags %}
 
 {% block content %}
 
-    <h1>Ingresar</h1>
-
-    <form action='#' method='POST'>
-        {%  csrf_token %}
-        {% for field in form %}
-            <div>
-                {{ field.label_tag }}
-                {{ field }}
-                {{ field.errors }}
-            </div>
-        {% endfor %}
-
-        {{ form.non_field_errors }}
-
-        <button>Enviar</button>
-    </form>
-
-
-    <div>
-      <a href='{% url "users:forget_password" %}'>¿Ha olvidado su contraseña?</a>
+  <div class="login-box">
+    <div class="login-logo">
+      <a href="#"><b>Admin</b>LTE</a>
     </div>
+
+    <div class="login-box-body">
+      <p class="login-box-msg">Ingrese sus credenciales</p>
+
+      <form action='#' method='POST'>
+        {% crispy form helper %}
+
+        <div class="row">
+          <div class="col-xs-4">
+            <button type="submit" class="btn btn-primary btn-block btn-flat">Acceder</button>
+          </div>
+        </div>
+      </form>
+
+      <br>
+      <a href='{% url "users:forget_password" %}'>¿Ha olvidado su contraseña?</a>
+
+    </div>
+  </div>
+
 {% endblock content %}

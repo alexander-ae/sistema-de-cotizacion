@@ -12,6 +12,7 @@ from .forms import RecoverPasswordForm
 from .forms import SetPasswordForm
 from users.models import UserProfile
 from quoman.helpers import DefaultFormHelper
+from quoman.helpers import BaseFormHelper
 
 
 def login_view(request):
@@ -44,6 +45,8 @@ def login_view(request):
             messages.add_message(request, messages.WARNING, 'Error de formulario')
     else:
         form = LoginForm()
+
+    helper = BaseFormHelper
 
     return render(request, 'users/login.html', locals())
 
@@ -87,6 +90,8 @@ def update_password(request):
     else:
         form = PasswordUpdateForm()
 
+    helper = DefaultFormHelper
+
     return render(request, 'users/password_update.html', locals())
 
 
@@ -102,6 +107,8 @@ def forget_password(request):
             return redirect('users:login')
     else:
         form = RecoverPasswordForm()
+
+    helper = BaseFormHelper
 
     return render(request, 'users/recover_password.html', locals())
 
@@ -121,5 +128,7 @@ def set_password(request, profile_id, uuid):
         except UserProfile.DoesNotExist:
             user = None
         form = SetPasswordForm(initial={'email': user.email, 'uuid': uuid})
+
+    helper = BaseFormHelper
 
     return render(request, 'users/set_password.html', locals())

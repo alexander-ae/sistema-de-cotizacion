@@ -37,7 +37,7 @@
                 <td>{{ cotizacion.propietario_id.userprofile.full_name }}</td>
                 <td>{{ cotizacion.get_estado_display }}</td>
                 <td>{{ cotizacion.ruc }}</td>
-                <td>{% if requestcotizacion.valida_hasta %}{{ cotizacion.valida_hasta }} {% else %} - {% endif %}</td>
+                <td>{% if cotizacion.valida_hasta %}{{ cotizacion.valida_hasta|date:'d M Y' }} {% else %} - {% endif %}</td>
               </tr>
             {% empty %}
               <tr>

@@ -13,13 +13,14 @@
 </head>
 
 <body class='skin-blue-light fixed'>
-<div class="wrapper">
-  {% include 'common/_messages.html' %}
 
+<div class="wrapper">
   {% include 'common/_header.html' %}
 
   <div class='content-wrapper'>
     <div class='content body'>
+      {% include 'common/_messages.html' %}
+
       {% block content %}
       {% endblock content %}
     </div>
