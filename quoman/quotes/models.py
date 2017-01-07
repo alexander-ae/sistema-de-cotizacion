@@ -13,7 +13,7 @@ class Quote(models.Model):
 
     estado = models.CharField('Estado', max_length=24, choices=constants.COTIZACION_ESTADO,
                               default=constants.COTIZACION_PENDIENTE, blank=True)
-    codigo = models.CharField('Código', max_length=12)
+    codigo = models.CharField('Código', max_length=12, unique=True)
     ruc = models.CharField('RUC', max_length=12, blank=True)
     representante = models.CharField('Representante', max_length=96, blank=True)
     tiempo_de_entrega = models.CharField('Tiempo de Entrega', max_length=96, blank=True)

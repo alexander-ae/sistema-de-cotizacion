@@ -1,38 +1,53 @@
 {% extends 'common/_base.html' %}
 
 {% block content %}
+  <div class='row'>
+    <div class='col-xs-12'>
+      <div class='box'>
+        <div class='box-header'>
+          <h1 class='box-title'>Cotizaciones</h1>
 
-  <h1>Cotizaciones</h1>
+          <div class='box-tools'>
+            <a href='{% url "quotes:new" %}' class='btn btn-block btn-primary'>
+              <i class="fa fa-plus" aria-hidden="true"></i>
+              Crear Cotización
+            </a>
+          </div>
+        </div>
 
-  <a href='{% url "quotes:new" %}'>Nueva cotización</a>
+        <div class='box-body table-responsive no-padding'>
 
-  <table class='table'>
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>Código</th>
-        <th>Propietario</th>
-        <th>Estado</th>
-        <th>RUC</th>
-        <th>Válida hasta</th>
-      </tr>
-    </thead>
+          <table class='table table-bordered table-responsive table-striped table-hover'>
+            <thead>
+            <tr>
+              <th>#</th>
+              <th>Código</th>
+              <th>Propietario</th>
+              <th>Estado</th>
+              <th>RUC</th>
+              <th>Válida hasta</th>
+            </tr>
+            </thead>
 
-    <tbody>
-      {% for cotizacion in lista_cotizaciones %}
-      <tr>
-        <td>{{ forloop.counter }}</td>
-        <td><a href='{{ cotizacion.get_absolute_url }}'>{{ cotizacion.codigo|upper }}</a></td>
-        <td>{{ cotizacion.propietario_id.userprofile.full_name }}</td>
-        <td>{{ cotizacion.get_estado_display }}</td>
-        <td>{{ cotizacion.ruc }}</td>
-        <td>{% if requestcotizacion.valida_hasta %}{{ cotizacion.valida_hasta }} {% else %} - {% endif %}</td>
-      </tr>
-      {% empty %}
-      <tr>
-        <td colspan='6'>No hay cotizaciones registradas</td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+            <tbody>
+            {% for cotizacion in lista_cotizaciones %}
+              <tr>
+                <td>{{ forloop.counter }}</td>
+                <td><a href='{{ cotizacion.get_absolute_url }}'>{{ cotizacion.codigo|upper }}</a></td>
+                <td>{{ cotizacion.propietario_id.userprofile.full_name }}</td>
+                <td>{{ cotizacion.get_estado_display }}</td>
+                <td>{{ cotizacion.ruc }}</td>
+                <td>{% if requestcotizacion.valida_hasta %}{{ cotizacion.valida_hasta }} {% else %} - {% endif %}</td>
+              </tr>
+            {% empty %}
+              <tr>
+                <td colspan='6'>No hay cotizaciones registradas</td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
 {% endblock content %}

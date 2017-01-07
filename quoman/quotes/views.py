@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 
 from .models import Quote
 from .forms import QuoteForm, QuoteReceiverFormSet, QuoteProductFormSet
+from quoman.helpers import DefaultFormHelper
 
 
 @login_required
@@ -16,20 +17,30 @@ def quotes_list(request):
 @login_required
 def quotes_new(request):
     usuario = request.user
+    cotizacion = Quote()
 
     if request.method == 'POST':
-        form = QuoteForm(request.POST, request.FILES)
+        form = QuoteForm(request.POST, request.FILES, instance=cotizacion)
+        quoteReceiverFormSet = QuoteReceiverFormSet(request.POST, instance=cotizacion)
+        quoteProductFormSet = QuoteProductFormSet(request.POST, instance=cotizacion)
 
-        if form.is_valid():
+        if form.is_valid() and quoteReceiverFormSet.is_valid() and quoteProductFormSet.is_valid():
             cotizacion = form.save()
             cotizacion.propietario_id = usuario
             cotizacion.save()
 
-            messages.add_message(request, messages.SUCCESS, 'Se registró el producto')
+            quoteReceiverFormSet.save()
+            quoteProductFormSet.save()
+
+            messages.add_message(request, messages.SUCCESS, 'Se registró la cotización')
 
             return redirect(cotizacion.get_absolute_url())
     else:
         form = QuoteForm()
+        quoteReceiverFormSet = QuoteReceiverFormSet(instance=cotizacion)
+        quoteProductFormSet = QuoteProductFormSet(instance=cotizacion)
+
+    helper = DefaultFormHelper
 
     return render(request, 'quotes/new_edit.html', locals())
 
@@ -56,5 +67,7 @@ def quotes_edit(request, codigo):
         form = QuoteForm(instance=cotizacion)
         quoteReceiverFormSet = QuoteReceiverFormSet(instance=cotizacion)
         quoteProductFormSet = QuoteProductFormSet(instance=cotizacion)
+
+    helper = DefaultFormHelper
 
     return render(request, 'quotes/new_edit.html', locals())

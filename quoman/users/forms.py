@@ -33,14 +33,6 @@ class LoginForm(forms.Form):
 
 
 class UserProfileForm(forms.ModelForm):
-    def __init__(self, *args, **kwargs):
-        super(UserProfileForm, self).__init__(*args, **kwargs)
-        self.helper = FormHelper()
-        self.helper.form_class = 'form-horizontal asd'
-        self.helper.label_class = 'col-lg-2'
-        self.helper.field_class = 'col-lg-8'
-
-        self.helper.add_input(Submit('submit', 'Enviar'))
 
     class Meta:
         model = UserProfile

@@ -1,69 +1,82 @@
 {% extends 'common/_base.html' %}
+{% load crispy_forms_tags %}
 
 {% block content %}
 
-  <h1>Producto {% if producto %}Edición{% else %}Registro{% endif %}</h1>
+  <div class="box box-primary">
+    <div class="box-header with-border">
+      <h1 class='box-title'>Cotización {% if producto %}Edición{% else %}Registro{% endif %}</h1>
+    </div>
 
-  <form action='#' method='POST' enctype='multipart/form-data'>
-    {% csrf_token %}
-    {{ quoteReceiverFormSet.management_form }}
-    {{ quoteProductFormSet.management_form }}
+    <form class='form-horizontal' action='#' method='POST' enctype='multipart/form-data'>
+      <div class="box-body">
+        {% csrf_token %}
+        {{ quoteReceiverFormSet.management_form }}
+        {{ quoteProductFormSet.management_form }}
 
+        {% crispy form form.helper %}
 
-    <fieldset>
-      {% for field in form %}
-        <div>
-          {{ field.label_tag }}
-          {{ field }}
-          {{ field.errors }}
-        </div>
-      {% endfor %}
-
-      {{ form.non_field_errors }}
-    </fieldset>
-
-    <fieldset>
-      <legend>Productos</legend>
-      <div id='formset-productos'>
-        {% for form in quoteProductFormSet %}
-          <div class='product_inline'>
-            {{ form.id }}
-            {{ form.as_ul }}
+        <fieldset>
+          <legend>Productos</legend>
+          <div id='formset-productos'>
+            {% for form in quoteProductFormSet %}
+              <div class='product_inline'>
+                {% crispy form form.helper %}
+              </div>
+            {% endfor %}
           </div>
-        {% endfor %}
+
+          <div class='row'>
+            <div class="col-lg-2 text-right">
+              <button id='btnProducto' class='btn'>
+                <i class="fa fa-plus" aria-hidden="true"></i>
+                Añadir Producto
+              </button>
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Destinatarios</legend>
+          <ul id='formset-destinatarios'>
+            {% for form in quoteReceiverFormSet %}
+              {% crispy form helper %}
+            {% endfor %}
+          </ul>
+
+          <div class="col-lg-2 text-right">
+            <button id='btnDestinatario' class='btn'>
+              <i class="fa fa-plus" aria-hidden="true"></i>
+              Añadir Destinatario
+            </button>
+          </div>
+        </fieldset>
       </div>
 
-      <button id='btnProducto'>Añadir Producto</button>
-    </fieldset>
-
-    <fieldset>
-      <legend>Destinatarios</legend>
-      <ul id='formset-destinatarios'>
-        {% for form in quoteReceiverFormSet %}
-          {{ form.id }}
-          <li>
-            {{ form.as_ul }}
-          </li>
-        {% endfor %}
-      </ul>
-
-      <button id='btnDestinatario'>Añadir Destinatario</button>
-    </fieldset>
-
-    <button>Enviar</button>
-  </form>
+      <div class="box-footer">
+        <div class="row">
+          <div class="col-lg-2 text-right">
+            <button class='btn btn-primary'>
+              <i class="fa fa-floppy-o" aria-hidden="true"></i>
+              Enviar
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
 {% endblock content %}
 
 
 {% block js %}
   <script type='template/productos'>
     <div class='product_inline'>
-      {{ quoteProductFormSet.empty_form.as_ul }}
+      {% crispy quoteProductFormSet.empty_form helper %}
     </div>
   </script>
 
   <script type='template/destinatarios'>
-    {{ quoteReceiverFormSet.empty_form.as_ul }}
+    {% crispy quoteReceiverFormSet.empty_form helper %}
   </script>
 
   <script>
@@ -95,24 +108,23 @@
           // cambio de un producto
           $('body').on('change', '.product_inline .producto', function (ev) {
               ev.preventDefault();
-              console.log('cambio');
               var _this = $(this),
                   _id = _this.val(),
                   _parent = _this.closest('.product_inline');
 
-              if(!_id){
+              if (!_id) {
                   return;
               }
 
               $.ajax({
                   url: '/productos/api/' + _id + '/?format=json',
               })
-              .done(function (data) {
-                  _parent.find('.sku').val(data.sku);
-                  _parent.find('.nombre').val(data.nombre);
-                  _parent.find('.detalle').val(data.detalle);
-                  _parent.find('.precio').val(data.precio);
-              });
+                  .done(function (data) {
+                      _parent.find('.sku').val(data.sku);
+                      _parent.find('.nombre').val(data.nombre);
+                      _parent.find('.detalle').val(data.detalle);
+                      _parent.find('.precio').val(data.precio);
+                  });
           })
       })
   </script>

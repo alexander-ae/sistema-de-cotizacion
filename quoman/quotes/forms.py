@@ -1,9 +1,15 @@
 from django import forms
 from django.forms.models import inlineformset_factory
+
 from .models import Quote, QuoteReceiver, QuoteProduct
+from quoman.helpers import DefaultFormHelper
 
 
 class QuoteForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super(QuoteForm, self).__init__(*args, **kwargs)
+        self.helper = DefaultFormHelper
 
     class Meta:
         model = Quote
@@ -27,5 +33,6 @@ class QuoteProductForm(forms.ModelForm):
         self.fields['detalle'].widget.attrs.update({'class': 'detalle'})
         self.fields['precio'].widget.attrs.update({'class': 'precio'})
 
+        self.helper = DefaultFormHelper
+
 QuoteProductFormSet = inlineformset_factory(Quote, QuoteProduct, form=QuoteProductForm, extra=0, can_delete=True)
-                                             #fields=('producto', 'sku', 'nombre', 'detalle', 'precio', 'cantidad'))

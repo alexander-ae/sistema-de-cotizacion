@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 
 from .models import Product
 from .forms import ProductForm
+from quoman.helpers import DefaultFormHelper
 
 
 @login_required
@@ -27,6 +28,8 @@ def products_new(request):
     else:
         form = ProductForm()
 
+    helper = DefaultFormHelper
+
     return render(request, 'products/new_edit.html', locals())
 
 
@@ -45,4 +48,6 @@ def products_edit(request, sku):
     else:
         form = ProductForm(instance=producto)
 
+    helper = DefaultFormHelper
+    
     return render(request, 'products/new_edit.html', locals())

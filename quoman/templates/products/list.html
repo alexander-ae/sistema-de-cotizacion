@@ -1,32 +1,47 @@
 {% extends 'common/_base.html' %}
 
 {% block content %}
+  <div class='row'>
+    <div class='col-xs-12'>
+      <div class='box'>
+        <div class='box-header'>
+          <h1 class='box-title'>Productos</h1>
 
-  <h1>Productos</h1>
+          <div class='box-tools'>
+            <a href='{% url "products:new" %}' class='btn btn-block btn-primary'>
+              <i class="fa fa-plus" aria-hidden="true"></i>
+              Crear Producto
+            </a>
+          </div>
+        </div>
 
-  <a href='{% url "products:new" %}'>Crear Producto</a>
+        <div class='box-body table-responsive no-padding'>
 
-  <table class='table'>
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>SKU</th>
-        <th>Nombre</th>
-      </tr>
-    </thead>
+          <table class='table table-bordered table-responsive table-striped table-hover'>
+            <thead>
+            <tr>
+              <th>#</th>
+              <th>SKU</th>
+              <th>Nombre</th>
+            </tr>
+            </thead>
 
-    <tbody>
-      {% for producto in lista_productos %}
-      <tr>
-        <td>{{ forloop.counter }}</td>
-        <td><a href='{{ producto.get_absolute_url }}'>{{ producto.sku|upper }}</a></td>
-        <td>{{ producto.nombre }}</td>
-      </tr>
-      {% empty %}
-      <tr>
-        <td colspan='3'>No hay productos registrados</td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+            <tbody>
+            {% for producto in lista_productos %}
+              <tr>
+                <td>{{ forloop.counter }}</td>
+                <td><a href='{{ producto.get_absolute_url }}'>{{ producto.sku|upper }}</a></td>
+                <td>{{ producto.nombre }}</td>
+              </tr>
+            {% empty %}
+              <tr>
+                <td colspan='3'>No hay productos registrados</td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
 {% endblock content %}

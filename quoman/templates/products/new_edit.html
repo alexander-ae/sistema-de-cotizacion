@@ -1,22 +1,28 @@
 {% extends 'common/_base.html' %}
+{% load crispy_forms_tags %}
 
 {% block content %}
+  <div class="box box-primary">
+    <div class="box-header with-border">
+      <h1 class='box-title'>Producto {% if producto %}Edición{% else %}Registro{% endif %}</h1>
+    </div>
 
-    <h1>Producto {% if producto %}Edición{% else %}Registro{% endif %}</h1>
+    <form class='form-horizontal' action='#' method='POST' enctype='multipart/form-data'>
+      <div class="box-body">
+        {% crispy form helper %}
+      </div>
 
-    <form action='#' method='POST' enctype='multipart/form-data'>
-        {%  csrf_token %}
-        {% for field in form %}
-            <div>
-                {{ field.label_tag }}
-                {{ field }}
-                {{ field.errors }}
-            </div>
-        {% endfor %}
-
-        {{ form.non_field_errors }}
-
-        <button>Enviar</button>
+      <div class="box-footer">
+        <div class="row">
+          <div class="col-lg-2 text-right">
+            <button class='btn btn-primary'>
+              <i class="fa fa-floppy-o" aria-hidden="true"></i>
+              Enviar
+            </button>
+          </div>
+        </div>
+      </div>
     </form>
+  </div>
 
 {% endblock content %}

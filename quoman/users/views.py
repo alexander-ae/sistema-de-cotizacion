@@ -11,6 +11,7 @@ from .forms import PasswordUpdateForm
 from .forms import RecoverPasswordForm
 from .forms import SetPasswordForm
 from users.models import UserProfile
+from quoman.helpers import DefaultFormHelper
 
 
 def login_view(request):
@@ -63,6 +64,8 @@ def profile(request):
             messages.add_message(request, messages.SUCCESS, 'Perfil actualizado')
     else:
         form = UserProfileForm(instance=user_profile)
+
+    helper = DefaultFormHelper
 
     return render(request, 'users/profile.html', locals())
 
