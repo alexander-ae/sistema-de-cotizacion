@@ -1,14 +1,47 @@
 {% if request.user.is_authenticated %}
-  <div>
-    <p>Usuario: <a href='{% url "users:profile" %}'>{{ request.user }}</a></p>
-  </div>
+  <header class="main-header">
+    <a href='#' class='logo'>Logo</a>
 
-  <ul>
-    <li><a href='{% url "quoman:dashboard" %}'>Dashboard</a></li>
-    <li><a href='{% url "products:list" %}'>Productos</a></li>
-    <li><a href='{% url "quotes:list" %}'>Cotizaciones</a></li>
+    <nav class='navbar navbar-static-top'>
+      <a href='#' class='sidebar-toggle' data-toggle='offcanvas' role='button'>
+        <span class="sr-only">Mostrar/Ocultar menú</span>
+      </a>
 
-    <li><a href='{% url "users:logout" %}'>Salir</a></li>
-  </ul>
+      <div class='navbar-custom-menu'>
+        <ul class='nav navbar-nav'>
+          <li>
+            <a href='{% url "users:profile" %}' class='bold'>
+              <i class='fa fa-user-circle-o' aria-hidden='true'></i>
 
+              {% if request.use.full_name %}
+                {{ request.use.full_name }}
+              {% else %}
+                {{ request.user }}
+              {% endif %}</a>
+          </li>
+
+          <li>
+            <a href='{% url "users:logout" %}'>
+              <i class='fa fa-sign-out' aria-hidden='true'></i>
+              Salir
+            </a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+
+  <aside class='main-sidebar'>
+    <div class='sidebar'>
+
+      <ul class='nav sidebar-menu'>
+        <li><a href='{% url "quoman:dashboard" %}'>Dashboard</a></li>
+        <li><a href='{% url "products:list" %}'>Productos</a></li>
+        <li><a href='{% url "quotes:list" %}'>Cotizaciones</a></li>
+
+        <li><a href='{% url "users:logout" %}'>Salir</a></li>
+      </ul>
+
+    </div>
+  </aside>
 {% endif %}

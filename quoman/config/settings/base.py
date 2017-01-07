@@ -6,7 +6,6 @@ Django settings for quoman project.
 import os
 from ..utils import get_env
 
-
 PROJECT_NAME = 'Sistema de cotizaciones'
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -19,7 +18,6 @@ DEBUG = True
 ALLOWED_HOSTS = []
 SITE_URL = ENV.get('SITE_URL')
 
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -28,6 +26,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'crispy_forms',
     'quoman',
     'users',
     'products',
@@ -66,7 +65,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-
 # Database
 DATABASES = {
     'default': {
@@ -104,7 +102,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 LOGIN_URL = '/ingresar/'
 
 # Internationalization
@@ -123,3 +120,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
+
+
+CRISPY_TEMPLATE_PACK = 'bootstrap3'

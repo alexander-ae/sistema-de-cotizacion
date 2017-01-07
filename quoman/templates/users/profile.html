@@ -1,24 +1,17 @@
 {% extends 'common/_base.html' %}
 
+{% load crispy_forms_tags %}
+
 {% block content %}
 
-    <h1>Perfil</h1>
+  <h1>Perfil</h1>
 
-    <a href='{% url "users:update_password" %}'>Cambiar contraseña</a>
+  {% crispy form form.helper %}
 
-    <form action='#' method='POST'>
-        {%  csrf_token %}
-        {% for field in form %}
-            <div>
-                {{ field.label_tag }}
-                {{ field }}
-                {{ field.errors }}
-            </div>
-        {% endfor %}
-
-        {{ form.non_field_errors }}
-
-        <button>Enviar</button>
-    </form>
+  <div class='row'>
+    <div class='col-lg-2 text-right'>
+      <a href='{% url "users:update_password" %}' class='bold'>Cambiar contraseña</a>
+    </div>
+  </div>
 
 {% endblock content %}

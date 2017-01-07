@@ -7,19 +7,31 @@
   <link rel='stylesheet' href='{% static "bootstrap/css/bootstrap.min.css" %}'>
   <link rel='stylesheet' href='{% static "adminlte/css/AdminLTE.min.css" %}'>
   <link rel='stylesheet' href='{% static "adminlte/css/skin-blue-light.min.css" %}'>
+  <link rel='stylesheet' href='{% static "font-awesome/css/font-awesome.min.css" %}'>
+
+  <link rel='stylesheet' href='{% static "css/main.css" %}'>
 </head>
 
-<body>
-{% include 'common/_messages.html' %}
+<body class='skin-blue-light fixed'>
+<div class="wrapper">
+  {% include 'common/_messages.html' %}
 
-{% include 'common/_header.html' %}
+  {% include 'common/_header.html' %}
 
-{% block content %}
-{% endblock content %}
+  <div class='content-wrapper'>
+    <div class='content body'>
+      {% block content %}
+      {% endblock content %}
+    </div>
+  </div>
 
-<script src='{% static "js/jquery-3.1.1.min.js" %}'></script>
+</div>
+
+<script src='{% static "js/jquery-2.2.4.min.js" %}'></script>
 <script src='{% static "bootstrap/js/bootstrap.min.js" %}'></script>
+<script src='{% static "adminlte/js/app.min.js" %}'></script>
 
+<script src='{% static "plugins/slimScroll/jquery.slimscroll.min.js" %}'></script>
 <script src='{% static "js/utils.js" %}'></script>
 
 {% block js %}
