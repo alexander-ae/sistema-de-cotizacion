@@ -33,6 +33,15 @@ class Quote(models.Model):
     def get_absolute_url(self):
         return reverse('quotes:edit', kwargs={'codigo': self.codigo})
 
+    def get_detail_url(self):
+        return reverse('quotes:detail', kwargs={'codigo': self.codigo})
+
+    def calcula_total(self):
+        total = 0
+        for producto in self.productos_a_cotizar.all():
+            total = total + producto.cantidad * producto.precio
+
+        return total
 
 
 class QuoteReceiver(models.Model):
@@ -55,7 +64,7 @@ class QuoteReceiver(models.Model):
 
 
 class QuoteProduct(models.Model):
-    quote = models.ForeignKey(Quote, verbose_name='Cotización')
+    quote = models.ForeignKey(Quote, verbose_name='Cotización', related_name='productos_a_cotizar')
     producto = models.ForeignKey(Product, verbose_name='Producto', blank=True, null=True)
     sku = models.CharField('SKU', max_length=32, help_text='Identificador único')
     nombre = models.CharField('Nombre', max_length=64)
@@ -72,3 +81,6 @@ class QuoteProduct(models.Model):
 
     def __str__(self):
         return self.sku
+
+    def calcula_subtotal(self):
+        return self.precio * self.cantidad

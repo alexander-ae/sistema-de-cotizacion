@@ -1,0 +1,140 @@
+{% extends 'common/_base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+  <div class="row">
+    <div class="col-sm-6">
+      <div class="box box-primary">
+        <div class="box-header with-border">
+          <h1 class='box-title'>Cotización #{{ codigo }}</h1>
+        </div>
+
+        <div class="box-body">
+
+          <div class="row">
+            <div class="col-sm-6 col-lg-4">
+              <strong>Fecha de creación:</strong>
+            </div>
+            <div class="col-sm-6 col-lg-8">
+              {{ cotizacion.fecha_de_creacion }}
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-sm-6 col-lg-4">
+              <strong>Propietario (vendedor):</strong>
+            </div>
+            <div class="col-sm-6 col-lg-8">
+              {{ cotizacion.propietario_id }}
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-sm-6 col-lg-4">
+              <strong>Tiempo de entrega:</strong>
+            </div>
+            <div class="col-sm-6 col-lg-8">
+              {{ cotizacion.tiempo_de_entrega }}
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-sm-6 col-lg-4">
+              <strong>Válida hasta:</strong>
+            </div>
+            <div class="col-sm-6 col-lg-8">
+              {{ cotizacion.valida_hasta }}
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-sm-6 col-lg-4">
+              <strong>Forma de Pago:</strong>
+            </div>
+            <div class="col-sm-6 col-lg-8">
+              {{ cotizacion.forma_de_pago }}
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-sm-6 col-lg-4">
+              <strong>Costo de envío:</strong>
+            </div>
+            <div class="col-sm-6 col-lg-8">
+              {{ cotizacion.costo_de_envio }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-6">
+      <div class="box box-primary">
+        <div class="box-header with-border">
+          <h2 class='box-title'>Información del cliente</h2>
+        </div>
+
+        <div class="box-body">
+          <div class="row">
+            <div class="col-sm-6 col-lg-4">
+              <strong>RUC:</strong>
+            </div>
+            <div class="col-sm-6 col-lg-8">
+              {{ cotizacion.ruc }}
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-sm-6 col-lg-4">
+              <strong>Representante:</strong>
+            </div>
+            <div class="col-sm-6 col-lg-8">
+              {{ cotizacion.representante }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="box box-primary">
+    <div class="box-header">
+      <h2 class="box-title">Productos</h2>
+    </div>
+
+    <div class='box-body table-responsive no-padding'>
+
+      <table class='table table-bordered table-responsive table-striped table-hover'>
+        <thead>
+        <tr>
+          <th>#</th>
+          <th>SKU</th>
+          <th>Nombre</th>
+          <th>Precio</th>
+          <th>Cantidad</th>
+          <th>Subtotal</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        {% for producto in cotizacion.productos_a_cotizar.all %}
+          <tr>
+            <td>{{ forloop.counter }}</td>
+            <td><a href='{{ producto.producto.get_absolute_url }}'>{{ producto.sku|upper }}</a></td>
+            <td>{{ producto.nombre }}</td>
+            <td>{{ producto.precio }}</td>
+            <td>{{ producto.cantidad }}</td>
+            <td>{{ producto.subtotal }}</td>
+          </tr>
+        {% empty %}
+          <tr>
+            <td colspan='3'>No hay productos registrados</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+{% endblock content %}

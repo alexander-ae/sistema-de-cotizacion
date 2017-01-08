@@ -71,3 +71,17 @@ def quotes_edit(request, codigo):
     helper = DefaultFormHelper
 
     return render(request, 'quotes/new_edit.html', locals())
+
+
+@login_required
+def quotes_detail(request, codigo):
+    try:
+        cotizacion = Quote.objects.get(codigo=codigo)
+    except Quote.DoesNotExist:
+        messages.add_message(request, messages.ERROR, 'No existe la cotización buscada')
+        return redirect('quotes:list')
+
+
+    fields = ('fecha_de_creacion', 'propietario_id', 'estado', 'codigo', 'ruc')
+
+    return render(request, 'quotes/detail.html', locals())
