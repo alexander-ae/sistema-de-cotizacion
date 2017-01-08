@@ -47,12 +47,17 @@ class Quote(models.Model):
     def get_detail_url(self):
         return reverse('quotes:detail', kwargs={'codigo': self.codigo})
 
-    def calcula_total(self):
-        ''' Incluye el costo de los productos, costo de envío e IGV '''
-
+    def calcula_subtotal_productos(self):
         subtotal = 0
         for producto in self.productos_a_cotizar.all():
             subtotal = subtotal + producto.cantidad * producto.precio
+
+        return subtotal
+
+    def calcula_total(self):
+        ''' Incluye el costo de los productos, costo de envío e IGV '''
+
+        subtotal = self.calcula_subtotal_productos()
 
         total_antes_igv = subtotal + self.costo_de_envio
         total = total_antes_igv * (1 + self.igv/100)

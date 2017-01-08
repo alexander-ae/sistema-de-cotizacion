@@ -3,13 +3,20 @@ from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
 
 from .models import Quote
+from users.constants import ROL_VENDEDOR, ROL_ADMINISTRADOR
 from .forms import QuoteForm, QuoteReceiverFormSet, QuoteProductFormSet
 from quoman.helpers import DefaultFormHelper
 
 
 @login_required
 def quotes_list(request):
-    lista_cotizaciones = Quote.objects.order_by('codigo').select_related('propietario_id__userprofile')
+    user = request.user
+
+    if user.userprofile.rol == ROL_VENDEDOR:
+        lista_cotizaciones = Quote.objects.filter(propietario_id=user
+                                                  ).order_by('codigo').select_related('propietario_id__userprofile')
+    elif user.userprofile.rol == ROL_ADMINISTRADOR or user.is_staff():
+        lista_cotizaciones = Quote.objects.order_by('codigo').select_related('propietario_id__userprofile')
 
     return render(request, 'quotes/list.html', locals())
 
@@ -47,8 +54,17 @@ def quotes_new(request):
 
 @login_required
 def quotes_edit(request, codigo):
-    # TODO: retornar a la lista de cotizaciones en caso se no encuentre el buscado
-    cotizacion = get_object_or_404(Quote, codigo=codigo)
+    usuario = request.user
+
+    try:
+        cotizacion = Quote.objects.get(codigo=codigo)
+    except Quote.DoesNotExist:
+        messages.add_message(request, messages.ERROR, 'No existe la cotización buscada')
+        return redirect('quotes:list')
+
+    if cotizacion.propietario_id != usuario:
+        messages.add_message(request, messages.WARNING, 'No cuenta con permisos para ver la cotización')
+        return redirect('quotes:list')
 
     if request.method == 'POST':
         form = QuoteForm(request.POST, request.FILES, instance=cotizacion)
