@@ -4,6 +4,7 @@ from django.db import models
 from . import constants
 from products.models import Product
 from users.models import User
+from quoman.models import Config
 
 
 class Quote(models.Model):
@@ -22,6 +23,8 @@ class Quote(models.Model):
     costo_de_envio = models.DecimalField('Costo de envío', max_digits=6, decimal_places=2, default=0)
     total = models.DecimalField('Total', max_digits=9, decimal_places=2, default=0)
 
+    igv = models.DecimalField('IGV', max_digits=3, decimal_places=1)
+
     class Meta:
         verbose_name = 'Cotización'
         verbose_name_plural = 'Cotizaciones'
@@ -31,8 +34,11 @@ class Quote(models.Model):
         return self.codigo
 
     def save(self, *args, **kwargs):
-        print('save cotizacion')
         self.total = self.calcula_total()
+        if not self.igv:
+            config, created = Config.objects.get_or_create(pk=1)
+            self.igv = config.igv
+
         super(Quote, self).save(*args, **kwargs)
 
     def get_absolute_url(self):
@@ -42,9 +48,14 @@ class Quote(models.Model):
         return reverse('quotes:detail', kwargs={'codigo': self.codigo})
 
     def calcula_total(self):
-        total = 0
+        ''' Incluye el costo de los productos, costo de envío e IGV '''
+
+        subtotal = 0
         for producto in self.productos_a_cotizar.all():
-            total = total + producto.cantidad * producto.precio
+            subtotal = subtotal + producto.cantidad * producto.precio
+
+        total_antes_igv = subtotal + self.costo_de_envio
+        total = total_antes_igv * (1 + self.igv/100)
 
         return total
 
@@ -88,7 +99,6 @@ class QuoteProduct(models.Model):
         return self.sku
 
     def save(self, *args, **kwargs):
-        print('save')
         self.subtotal = self.calcula_subtotal()
         super(QuoteProduct, self).save(*args, **kwargs)
 

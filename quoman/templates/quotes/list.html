@@ -26,6 +26,7 @@
               <th>Estado</th>
               <th>RUC</th>
               <th>Válida hasta</th>
+              <th>Total</th>
               <th>Ver</th>
             </tr>
             </thead>
@@ -38,7 +39,9 @@
                 <td>{{ cotizacion.propietario_id.userprofile.full_name }}</td>
                 <td>{{ cotizacion.get_estado_display }}</td>
                 <td>{{ cotizacion.ruc }}</td>
-                <td>{% if cotizacion.valida_hasta %}{{ cotizacion.valida_hasta|date:'d M Y' }} {% else %} - {% endif %}</td>
+                <td>{% if cotizacion.valida_hasta %}{{ cotizacion.valida_hasta|date:'d M Y' }} {% else %}
+                  - {% endif %}</td>
+                <td>{{ cotizacion.total }}</td>
                 <td><a href='{{ cotizacion.get_detail_url }}'>Detalle</a></td>
               </tr>
             {% empty %}

@@ -132,9 +132,22 @@
             <td colspan='3'>No hay productos registrados</td>
           </tr>
         {% endfor %}
+
         <tr>
           <td colspan='4'></td>
-          <td><strong>Subtotal:</strong></td>
+          <td><strong>Costo de envío:</strong></td>
+          <td>{{ cotizacion.costo_de_envio }}</td>
+        </tr>
+
+        <tr>
+          <td colspan='4'></td>
+          <td><strong>IGV:</strong></td>
+          <td>{{ cotizacion.igv}}</td>
+        </tr>
+
+        <tr>
+          <td colspan='4'></td>
+          <td><strong>Total:</strong></td>
           <td>{{ cotizacion.total }}</td>
         </tr>
         </tbody>
