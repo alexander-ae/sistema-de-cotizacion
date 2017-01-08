@@ -132,9 +132,15 @@
             <td colspan='3'>No hay productos registrados</td>
           </tr>
         {% endfor %}
+        <tr>
+          <td colspan='4'></td>
+          <td><strong>Subtotal:</strong></td>
+          <td>{{ cotizacion.total }}</td>
+        </tr>
         </tbody>
       </table>
     </div>
   </div>
+
 
 {% endblock content %}

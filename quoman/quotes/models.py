@@ -30,6 +30,11 @@ class Quote(models.Model):
     def __str__(self):
         return self.codigo
 
+    def save(self, *args, **kwargs):
+        print('save cotizacion')
+        self.total = self.calcula_total()
+        super(Quote, self).save(*args, **kwargs)
+
     def get_absolute_url(self):
         return reverse('quotes:edit', kwargs={'codigo': self.codigo})
 
@@ -81,6 +86,11 @@ class QuoteProduct(models.Model):
 
     def __str__(self):
         return self.sku
+
+    def save(self, *args, **kwargs):
+        print('save')
+        self.subtotal = self.calcula_subtotal()
+        super(QuoteProduct, self).save(*args, **kwargs)
 
     def calcula_subtotal(self):
         return self.precio * self.cantidad

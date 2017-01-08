@@ -106,11 +106,15 @@ LOGIN_URL = '/ingresar/'
 
 # Internationalization
 
-LANGUAGE_CODE = 'es-pe'
+LANGUAGE_CODE = 'es'
 TIME_ZONE = 'America/Lima'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
+
+FORMAT_MODULE_PATH = [
+    'quoman.formats'
+]
 
 STATIC_URL = '/static/'
 

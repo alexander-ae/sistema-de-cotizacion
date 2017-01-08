@@ -56,9 +56,12 @@ def quotes_edit(request, codigo):
         quoteProductFormSet = QuoteProductFormSet(request.POST, instance=cotizacion)
 
         if form.is_valid() and quoteReceiverFormSet.is_valid() and quoteProductFormSet.is_valid():
-            form.save()
+            cotizacion = form.save()
             quoteReceiverFormSet.save()
             quoteProductFormSet.save()
+
+            for form in quoteProductFormSet:
+                form.save()
 
             messages.add_message(request, messages.SUCCESS, 'Se actualizó la cotización')
             return redirect(cotizacion.get_absolute_url())
