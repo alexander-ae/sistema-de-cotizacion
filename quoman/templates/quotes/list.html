@@ -1,6 +1,20 @@
 {% extends 'common/_base.html' %}
 
 {% block content %}
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box box-primary">
+        <div class="box-header">
+          <ul class='breadcrumb'>
+            <li><a href='{% url 'quoman:dashboard' %}'> <i class="fa fa-home" aria-hidden="true"></i> Dashboard</a></li>
+            <li><a href='{% url "quotes:list" %}'>Cotizaciones</a></li>
+            <li class='active'><a>{% if cotizacion %}{{ cotizacion.codigo}}{% else %}Nueva Cotización{% endif %}</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class='row'>
     <div class='col-xs-12'>
       <div class='box'>
