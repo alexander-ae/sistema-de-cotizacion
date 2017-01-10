@@ -7,4 +7,5 @@ urlpatterns = [
     url(r'^nuevo/$', views.quotes_new, name='new'),
     url(r'^editar/(?P<codigo>[-\w]+)/$', views.quotes_edit, name='edit'),
     url(r'^detalle/(?P<codigo>[-\w]+)/$', views.quotes_detail, name='detail'),
+    url(r'^pdf/(?P<codigo>[-\w]+)/$', views.quotes_pdf, name='pdf'),
 ]

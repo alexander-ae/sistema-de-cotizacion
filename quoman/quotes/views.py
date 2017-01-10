@@ -1,10 +1,13 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 
 from .models import Quote
 from users.constants import ROL_VENDEDOR, ROL_ADMINISTRADOR
 from .forms import QuoteForm, QuoteReceiverFormSet, QuoteProductFormSet
+from .pdf import draw_pdf
+from .utils import pdf_response
+
 from quoman.helpers import DefaultFormHelper
 
 
@@ -100,7 +103,17 @@ def quotes_detail(request, codigo):
         messages.add_message(request, messages.ERROR, 'No existe la cotización buscada')
         return redirect('quotes:list')
 
-
     fields = ('fecha_de_creacion', 'propietario_id', 'estado', 'codigo', 'ruc')
 
     return render(request, 'quotes/detail.html', locals())
+
+
+@login_required
+def quotes_pdf(request, codigo):
+    try:
+        cotizacion = Quote.objects.get(codigo=codigo)
+    except Quote.DoesNotExist:
+        messages.add_message(request, messages.ERROR, 'No existe la cotización buscada')
+        return redirect('quotes:list')
+
+    return pdf_response(draw_pdf, 'cotizacion.pdf', cotizacion)
