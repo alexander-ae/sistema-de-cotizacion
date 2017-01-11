@@ -1,3 +1,6 @@
+import os
+from django.conf import settings
+
 from reportlab.pdfgen import canvas
 from reportlab.platypus import Table
 from reportlab.lib.pagesizes import A4
@@ -5,11 +8,11 @@ from reportlab.lib.units import cm
 from reportlab.platypus import BaseDocTemplate, PageTemplate, Frame, Paragraph, Image
 from reportlab.platypus import TableStyle
 from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
-from reportlab.lib.enums import TA_CENTER, TA_RIGHT
+from reportlab.lib.enums import TA_CENTER, TA_RIGHT, TA_LEFT
 from reportlab.lib import colors
 
-from . import config as settings
 from quoman.models import Config
+from .utils import bold
 
 FONT_FAMILY = 'Helvetica'
 
@@ -18,6 +21,7 @@ class CustomCanvas(canvas.Canvas):
     def __init__(self, *args, **kwargs):
         canvas.Canvas.__init__(self, *args, **kwargs)
         self._saved_page_states = []
+        self.config, created = Config.objects.get_or_create(pk=1)
 
     def showPage(self):
         self._saved_page_states.append(dict(self.__dict__))
@@ -44,21 +48,21 @@ class CustomCanvas(canvas.Canvas):
         self.drawRightString(19 * cm, - 28.5 * cm,
                              'Página {} de {}'.format(self._pageNumber, page_count))
 
-    def draw_header(canvas):
-        canvas.setStrokeColorRGB(0, 0.2, 0.4)
-        canvas.setFillColorRGB(0.2, 0.2, 0.2)
-        canvas.drawString(16 * cm, -1 * cm, 'Massive Dinamycs')
-        canvas.drawInlineImage(settings.INV_LOGO, 1 * cm, -1 * cm, 180, 16, preserveAspectRatio=True)
-        canvas.setLineWidth(2)
-        canvas.line(0.75 * cm, -1.20 * cm, 20 * cm, -1.20 * cm)
+    def draw_header(self):
+        self.setStrokeColorRGB(0, 0.2, 0.4)
+        self.setFillColorRGB(0.2, 0.2, 0.2)
+        self.drawString(16 * cm, -1 * cm, self.config.razon_social)
+        # self.drawInlineImage(settings.INV_LOGO, 1 * cm, -1 * cm, 180, 16, preserveAspectRatio=True)
+        self.setLineWidth(2)
+        self.line(0.75 * cm, -1.20 * cm, 20 * cm, -1.20 * cm)
 
-    def draw_footer(canvas):
-        canvas.setStrokeColorRGB(0, 0.2, 0.4)
-        canvas.setFillColorRGB(0.2, 0.2, 0.2)
-        canvas.setLineWidth(2)
+    def draw_footer(self):
+        self.setStrokeColorRGB(0, 0.2, 0.4)
+        self.setFillColorRGB(0.2, 0.2, 0.2)
+        self.setLineWidth(2)
 
-        canvas.line(0.75 * cm, -28.00 * cm, 20 * cm, -28 * cm)
-        canvas.drawString(2 * cm, -28.5 * cm, '10/01/2016')
+        self.line(0.75 * cm, -28.00 * cm, 20 * cm, -28 * cm)
+        self.drawString(2 * cm, -28.5 * cm, '10/01/2016')
 
 
 def draw_pdf(buffer, cotizacion):
@@ -83,14 +87,15 @@ def draw_pdf(buffer, cotizacion):
     styleN = styles['Normal']
 
     # cabecera
-    logo = Image(settings.INV_LOGO)
+    logo = Image(os.path.join(settings.MEDIA_ROOT, config.logo.path))
     elements.append(logo)
 
     header_info = [
         ('Domilio Fiscal', config.direccion),
         ('RUC', config.ruc),
         ('Teléfono', cotizacion.propietario_id.userprofile.telefono),
-        ('Email', cotizacion.propietario_id.userprofile.email)
+        ('Email', cotizacion.propietario_id.userprofile.email),
+        ('Representante asignado', cotizacion.propietario_id.userprofile.full_name())
     ]
 
     style_header = ParagraphStyle(name='Normal',
@@ -105,16 +110,48 @@ def draw_pdf(buffer, cotizacion):
 
     style_title = ParagraphStyle(name='header',
                                  fontName=FONT_FAMILY,
-                                 fontSize=14,
-                                 spaceAfter=10,
-                                 spaceBefore=10,
+                                 fontSize=16,
+                                 spaceAfter=20,
+                                 spaceBefore=20,
                                  alignment=TA_CENTER)
 
     elements.append(Paragraph('<b>Cotización 2017-0014</b>', style_title))
 
     # datos de la empresa
+    info_empresa = [
+        ('Empresa:', cotizacion.empresa_razon_social, 'RUC:', cotizacion.ruc),
+        ('Dirección:', cotizacion.empresa_direccion, 'Fecha:', cotizacion.fecha_de_creacion.strftime('%d/%m/%Y')),
+        ('Atención:', cotizacion.representante, 'Teléfono:', cotizacion.empresa_telefono),
+        ('Tiempo de Entrega:', cotizacion.tiempo_de_entrega, 'Método de pago:', cotizacion.forma_de_pago)
+    ]
 
+    data_empresa = []
+    styleLeft = ParagraphStyle(name='Normal',
+                               fontName=FONT_FAMILY,
+                               fontSize=10,
+                               leading=12,
+                               alignment=TA_LEFT,
+                               wordWrap='CJK'
+                               )
 
+    for line in info_empresa:
+        _p1 = Paragraph(bold(line[0]), styleN)
+        _p2 = Paragraph(line[1], styleLeft)
+        _p3 = Paragraph(bold(line[2]), styleN)
+        _p4 = Paragraph(line[3], styleLeft)
+
+        data_empresa.append(
+            (_p1, _p2, _p3, _p4)
+        )
+
+    tableEmpresa = Table(data_empresa, colWidths=[3 * cm, 6.5 * cm, 3.5 * cm, 4.5 * cm], spaceAfter=20, hAlign='LEFT')
+    styleTableEmpresa = TableStyle([
+        ('ALIGN', (1, 0), (1, -1), 'LEFT'),
+        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+    ])
+    tableEmpresa.setStyle(styleTableEmpresa)
+
+    elements.append(tableEmpresa)
 
     # productos a cotizar
     s = getSampleStyleSheet()
@@ -137,6 +174,7 @@ def draw_pdf(buffer, cotizacion):
                  'S/ {}'.format(cotizacion.calcula_subtotal_productos())])
     data.append(
         ['', '', '', Paragraph('<b>Envío</b>', styleR), 'S/ {}'.format(cotizacion.costo_de_envio)])
+
     data.append(
         ['', '', 'IGV', Paragraph('<b>{} %</b>'.format(cotizacion.igv), styleR),
          'S/ {:.2f}'.format(cotizacion.calcula_igv())])
@@ -161,5 +199,12 @@ def draw_pdf(buffer, cotizacion):
 
     # texto final
 
+    if cotizacion.aplica_detraccion:
+        _style = styleN
+        _style.fontSize = 10
+        _style.textColor = colors.HexColor(0x666666)
+        _style.spaceBefore = 20
+
+        elements.append(Paragraph(config.detraccion_texto, _style))
 
     doc.build(elements, canvasmaker=CustomCanvas)

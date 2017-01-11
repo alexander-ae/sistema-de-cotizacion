@@ -11,12 +11,18 @@ class Quote(models.Model):
     fecha_de_creacion = models.DateTimeField('Fecha de creación', auto_now_add=True)
     propietario_id = models.ForeignKey(User, verbose_name='Propietario', blank=True, null=True,
                                        on_delete=models.PROTECT)
+    aplica_detraccion = models.BooleanField('Aplica Detracción', default=False)
 
     estado = models.CharField('Estado', max_length=24, choices=constants.COTIZACION_ESTADO,
                               default=constants.COTIZACION_PENDIENTE, blank=True)
     codigo = models.CharField('Código', max_length=12, unique=True)
+
     ruc = models.CharField('RUC', max_length=12, blank=True)
+    empresa_razon_social = models.CharField('Razón Social', max_length=180)
+    empresa_direccion = models.CharField('Dirección', max_length=180)
     representante = models.CharField('Representante', max_length=96, blank=True)
+    empresa_telefono = models.CharField('Teléfono de la empresa', max_length=32, blank=True)
+
     tiempo_de_entrega = models.CharField('Tiempo de Entrega', max_length=96, blank=True)
     valida_hasta = models.DateTimeField('Válida hasta', blank=True, null=True)
     forma_de_pago = models.TextField('Forma de pago', max_length=120)
