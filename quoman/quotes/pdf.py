@@ -36,6 +36,7 @@ class CustomCanvas(canvas.Canvas):
             self.setFont(FONT_FAMILY, 11)
 
             # métodos personalizados
+            self.setAuthor('quoman')
             self.draw_page_number(num_pages)
             self.draw_header()
             self.draw_footer()
@@ -75,8 +76,9 @@ def draw_pdf(buffer, cotizacion):
                           rightMargin=72,
                           leftMargin=72,
                           topMargin=72,
-                          bottomMargin=72)
-
+                          bottomMargin=72,
+                          title=cotizacion.codigo)
+    #doc.canv.setTitle()
     pHeight, pWidth = doc.pagesize
     myFrame = Frame(0, 0, pHeight, pWidth, 50, 60, 50, 50, id='myFrame')
     mainTemplate = PageTemplate(id='mainTemplate', frames=[myFrame])
