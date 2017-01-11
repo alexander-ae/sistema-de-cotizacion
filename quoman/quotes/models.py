@@ -57,13 +57,19 @@ class Quote(models.Model):
 
         return subtotal
 
+    def calcula_igv(self):
+        subtotal = self.calcula_subtotal_productos()
+
+        total_antes_igv = subtotal + self.costo_de_envio
+        return total_antes_igv * self.igv / 100
+
     def calcula_total(self):
         ''' Incluye el costo de los productos, costo de envío e IGV '''
 
         subtotal = self.calcula_subtotal_productos()
 
         total_antes_igv = subtotal + self.costo_de_envio
-        total = total_antes_igv * (1 + self.igv/100)
+        total = total_antes_igv + self.calcula_igv()
 
         return total
 

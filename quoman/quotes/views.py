@@ -65,7 +65,7 @@ def quotes_edit(request, codigo):
         messages.add_message(request, messages.ERROR, 'No existe la cotización buscada')
         return redirect('quotes:list')
 
-    if cotizacion.propietario_id != usuario:
+    if cotizacion.propietario_id != usuario and cotizacion.propietario_id.is_superuser:
         messages.add_message(request, messages.WARNING, 'No cuenta con permisos para ver la cotización')
         return redirect('quotes:list')
 
