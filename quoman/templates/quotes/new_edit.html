@@ -9,7 +9,8 @@
           <ul class='breadcrumb'>
             <li><a href='{% url 'quoman:dashboard' %}'> <i class="fa fa-home" aria-hidden="true"></i> Dashboard</a></li>
             <li><a href='{% url 'quotes:list' %}'>Cotizaciones</a></li>
-            <li class='active'><a>{% if cotizacion %}{{ cotizacion.codigo}}{% else %}Nueva Cotización{% endif %}</a></li>
+            <li class='active'><a>{% if cotizacion %}{{ cotizacion.codigo }}{% else %}Nueva Cotización{% endif %}</a>
+            </li>
           </ul>
         </div>
       </div>
@@ -19,6 +20,15 @@
   <div class="box">
     <div class="box-header with-border">
       <h1 class='box-title'>Cotización {% if producto %}Edición{% else %}Registro{% endif %}</h1>
+
+      {% if form.instance.codigo %}
+        <div class='box-tools'>
+          <a href='{{ cotizacion.get_pdf_url }}' class='btn btn-block' target='_blank'>
+            <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+            Vista previa en PDF
+          </a>
+        </div>
+      {% endif %}
     </div>
 
     <form class='form-horizontal form-condensed' action='#' method='POST' enctype='multipart/form-data'>

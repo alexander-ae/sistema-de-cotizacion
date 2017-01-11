@@ -1,5 +1,6 @@
 import os
 from django.conf import settings
+from django.utils import timezone
 
 from reportlab.pdfgen import canvas
 from reportlab.platypus import Table
@@ -63,7 +64,8 @@ class CustomCanvas(canvas.Canvas):
         self.setLineWidth(2)
 
         self.line(0.75 * cm, -28.00 * cm, 20 * cm, -28 * cm)
-        self.drawString(2 * cm, -28.5 * cm, '10/01/2016')
+        fecha_actual = timezone.now().strftime('%d/%m/%Y')
+        self.drawString(2 * cm, -28.5 * cm, fecha_actual)
 
 
 def draw_pdf(buffer, cotizacion):
@@ -117,7 +119,7 @@ def draw_pdf(buffer, cotizacion):
                                  spaceBefore=20,
                                  alignment=TA_CENTER)
 
-    elements.append(Paragraph('<b>Cotización 2017-0014</b>', style_title))
+    elements.append(Paragraph('<b>Cotización {}</b>'.format(cotizacion.codigo), style_title))
 
     # datos de la empresa
     info_empresa = [

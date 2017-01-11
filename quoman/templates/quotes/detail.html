@@ -24,7 +24,7 @@
           <h1 class='box-title'>Cotización #{{ codigo }}</h1>
 
           <div class='box-tools'>
-            <a href='{{ cotizacion.get_pdf_url }}' class='btn btn-block'>
+            <a href='{{ cotizacion.get_pdf_url }}' class='btn btn-block' target='_blank'>
               <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
               Generar PDF
             </a>
@@ -181,6 +181,4 @@
       </table>
     </div>
   </div>
-
-
 {% endblock content %}
