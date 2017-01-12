@@ -9,6 +9,7 @@ from .forms import QuoteForm, QuoteReceiverFormSet, QuoteProductFormSet
 from .pdf import draw_pdf
 from .pdf import envia_cotizacion
 from .utils import pdf_response
+from quoman.models import Config
 from quoman.helpers import DefaultFormHelper
 from users.constants import ROL_VENDEDOR, ROL_ADMINISTRADOR
 
@@ -30,6 +31,7 @@ def quotes_list(request):
 def quotes_new(request):
     usuario = request.user
     cotizacion = Quote()
+    config, created = Config.objects.get_or_create(pk=1)
 
     if request.method == 'POST':
         form = QuoteForm(request.POST, request.FILES, instance=cotizacion)
@@ -37,12 +39,16 @@ def quotes_new(request):
         quoteProductFormSet = QuoteProductFormSet(request.POST, instance=cotizacion)
 
         if form.is_valid() and quoteReceiverFormSet.is_valid() and quoteProductFormSet.is_valid():
-            cotizacion = form.save()
+            cotizacion = form.save(commit=False)
             cotizacion.propietario_id = usuario
+            cotizacion.igv = config.igv
             cotizacion.save()
 
             quoteReceiverFormSet.save()
             quoteProductFormSet.save()
+
+            cotizacion.total = cotizacion.calcula_total()
+            cotizacion.save()
 
             messages.add_message(request, messages.SUCCESS, 'Se registró la cotización')
 
@@ -60,6 +66,7 @@ def quotes_new(request):
 @login_required
 def quotes_edit(request, codigo):
     usuario = request.user
+    config, created = Config.objects.get_or_create(pk=1)
 
     try:
         cotizacion = Quote.objects.get(codigo=codigo)
@@ -77,9 +84,15 @@ def quotes_edit(request, codigo):
         quoteProductFormSet = QuoteProductFormSet(request.POST, instance=cotizacion)
 
         if form.is_valid() and quoteReceiverFormSet.is_valid() and quoteProductFormSet.is_valid():
-            cotizacion = form.save()
+            cotizacion = form.save(commit=False)
+            cotizacion.igv = config.igv
+            cotizacion.save()
+
             quoteReceiverFormSet.save()
             quoteProductFormSet.save()
+
+            cotizacion.total = cotizacion.calcula_total()
+            cotizacion.save()
 
             for form in quoteProductFormSet:
                 form.save()
