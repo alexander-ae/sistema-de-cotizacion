@@ -139,9 +139,7 @@ def send_quote(request, codigo):
         data['status_code'] = respuesta['status_code']
         data['mensaje'] = respuesta['mensaje']
 
-    print(data)
-
     jsonResponse = JsonResponse(data)
     jsonResponse.status_code = data['status_code']
 
-    return JsonResponse
+    return jsonResponse

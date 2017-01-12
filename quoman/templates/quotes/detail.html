@@ -18,22 +18,32 @@
   </div>
 
   <div class="row">
+    <div class="col-md-12 col-sm-12">
+      <div class="box">
+        <div class="box-body">
+          <a href='{{ cotizacion.get_send_url }}' class='btn btn-primary' target='_blank'>
+            <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+            Enviar cotización
+          </a>
+
+          <a href='{{ cotizacion.get_pdf_url }}' class='btn btn-info' target='_blank'>
+            <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+            Ver PDF
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="row">
     <div class="col-sm-6">
       <div class="box">
         <div class="box-header with-border">
           <h1 class='box-title'>Cotización #{{ codigo }}</h1>
 
-
           <div class='box-tools'>
-            <a href='{{ cotizacion.get_pdf_url }}' class='btn btn-block' target='_blank'>
-              <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
-              Generar PDF
-            </a>
 
-            <a href='{{ cotizacion.get_send_url }}' class='btn btn-block' target='_blank'>
-              <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
-              Enviar cotización
-            </a>
           </div>
         </div>
 
@@ -114,10 +124,37 @@
 
           <div class="row">
             <div class="col-sm-6 col-lg-4">
+              <strong>Razón Social:</strong>
+            </div>
+            <div class="col-sm-6 col-lg-8">
+              {{ cotizacion.empresa_razon_social }}
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-sm-6 col-lg-4">
               <strong>Representante:</strong>
             </div>
             <div class="col-sm-6 col-lg-8">
               {{ cotizacion.representante }}
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-sm-6 col-lg-4">
+              <strong>Dirección:</strong>
+            </div>
+            <div class="col-sm-6 col-lg-8">
+              {{ cotizacion.empresa_direccion }}
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-sm-6 col-lg-4">
+              <strong>Teléfono:</strong>
+            </div>
+            <div class="col-sm-6 col-lg-8">
+              {{ cotizacion.empresa_telefono }}
             </div>
           </div>
         </div>
@@ -185,6 +222,38 @@
         </tr>
         </tbody>
       </table>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6 col-sm-12">
+      <div class="box">
+        <div class="box-header with-border">
+          <h2 class='box-title'>Destinatarios</h2>
+        </div>
+
+        <div class="box-body">
+          <table class='table table-bordered table-responsive table-striped table-hover'>
+            <thead>
+            <tr>
+              <th>#</th>
+              <th>Nombre</th>
+              <th>Correo</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            {% for destinatario in cotizacion.quotereceiver_set.all %}
+              <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ destinatario.nombres }}</td>
+                <td>{{ destinatario.email }}</td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   </div>
 {% endblock content %}
