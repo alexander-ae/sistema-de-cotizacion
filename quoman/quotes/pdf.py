@@ -1,6 +1,10 @@
 import os
-from django.conf import settings
+from io import BytesIO
 from django.utils import timezone
+from django.template.loader import get_template
+from django.template import Context
+from django.core.mail import EmailMessage
+from django.conf import settings
 
 from reportlab.pdfgen import canvas
 from reportlab.platypus import Table
@@ -80,7 +84,7 @@ def draw_pdf(buffer, cotizacion):
                           topMargin=72,
                           bottomMargin=72,
                           title=cotizacion.codigo)
-    #doc.canv.setTitle()
+    # doc.canv.setTitle()
     pHeight, pWidth = doc.pagesize
     myFrame = Frame(0, 0, pHeight, pWidth, 50, 60, 50, 50, id='myFrame')
     mainTemplate = PageTemplate(id='mainTemplate', frames=[myFrame])
@@ -212,3 +216,42 @@ def draw_pdf(buffer, cotizacion):
         elements.append(Paragraph(config.detraccion_texto, _style))
 
     doc.build(elements, canvasmaker=CustomCanvas)
+
+    return doc
+
+
+def envia_cotizacion(cotizacion):
+    config, created = Config.objects.get_or_create(pk=1)
+
+    htmly = get_template('quotes/email-quote.html')
+    d = Context({
+        'config': config,
+        'cotizacion': cotizacion,
+        'SITE_URL': settings.SITE_URL
+    })
+
+    html_content = htmly.render(d)
+    asunto = u'Cotización {}'.format(cotizacion.codigo)
+    mail = '{0}<{1}>'.format(settings.PROJECT_NAME, settings.DEFAULT_FROM_EMAIL)
+    emails_destino = cotizacion.quotereceiver_set.all().values_list('email', flat=True)
+
+    msg = EmailMessage(asunto, html_content, mail, emails_destino)
+    msg.content_subtype = "html"
+
+    buffer = BytesIO()
+    draw_pdf(buffer, cotizacion)
+
+    msg.attach('cotizacion.pdf', buffer.getvalue(), 'application/pdf')
+    msg.send()
+
+    try:
+        msg.send()
+        return {
+            'status_code': 200,
+            'mensaje': 'El correo ha sido enviado'
+        }
+    except:
+        return {
+            'status_code': 503,
+            'mensaje': 'El servicio de envío de correos tiene problemas'
+        }

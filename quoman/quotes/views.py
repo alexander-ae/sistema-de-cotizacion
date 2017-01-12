@@ -1,14 +1,16 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.shortcuts import render, redirect
+from django.http import JsonResponse
 
+from .constants import COTIZACION_PENDIENTE
 from .models import Quote
-from users.constants import ROL_VENDEDOR, ROL_ADMINISTRADOR
 from .forms import QuoteForm, QuoteReceiverFormSet, QuoteProductFormSet
 from .pdf import draw_pdf
+from .pdf import envia_cotizacion
 from .utils import pdf_response
-
 from quoman.helpers import DefaultFormHelper
+from users.constants import ROL_VENDEDOR, ROL_ADMINISTRADOR
 
 
 @login_required
@@ -117,3 +119,29 @@ def quotes_pdf(request, codigo):
         return redirect('quotes:list')
 
     return pdf_response(draw_pdf, 'cotizacion.pdf', cotizacion)
+
+
+@login_required
+def send_quote(request, codigo):
+    data = {'status_code': 200}
+
+    try:
+        cotizacion = Quote.objects.get(codigo=codigo)
+    except Quote.DoesNotExist:
+        data['mensaje'] = 'No existe la cotización buscada'
+        return JsonResponse(data, status_code=404)
+
+    if cotizacion.estado != COTIZACION_PENDIENTE:
+        data['status_code'] = 409
+        data['mensaje'] = 'La cotización ya ha sido enviada'
+    else:
+        respuesta = envia_cotizacion(cotizacion)
+        data['status_code'] = respuesta['status_code']
+        data['mensaje'] = respuesta['mensaje']
+
+    print(data)
+
+    jsonResponse = JsonResponse(data)
+    jsonResponse.status_code = data['status_code']
+
+    return JsonResponse

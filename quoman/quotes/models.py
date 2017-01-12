@@ -56,6 +56,9 @@ class Quote(models.Model):
     def get_pdf_url(self):
         return reverse('quotes:pdf', kwargs={'codigo': self.codigo})
 
+    def get_send_url(self):
+        return reverse('quotes:send_quote', kwargs={'codigo': self.codigo})
+
     def calcula_subtotal_productos(self):
         subtotal = 0
         for producto in self.productos_a_cotizar.all():
