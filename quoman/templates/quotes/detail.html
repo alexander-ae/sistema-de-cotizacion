@@ -187,9 +187,14 @@
             <td>{{ forloop.counter }}</td>
             <td><a href='{{ producto.producto.get_absolute_url }}'>{{ producto.sku|upper }}</a></td>
             <td>{{ producto.nombre }}</td>
-            <td>{{ producto.precio }}</td>
+            <td>S/ {{ producto.precio }}</td>
             <td>{{ producto.cantidad }}</td>
-            <td>{{ producto.subtotal }}</td>
+            <td>S/ {{ producto.subtotal }}</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td colspan='4'>{{ producto.detalle }}</td>
           </tr>
         {% empty %}
           <tr>
@@ -200,25 +205,25 @@
         <tr>
           <td colspan='4'></td>
           <td><strong>Subtotal:</strong></td>
-          <td>{{ cotizacion.calcula_subtotal_productos }}</td>
+          <td>S/ {{ cotizacion.calcula_subtotal_productos }}</td>
         </tr>
 
         <tr>
           <td colspan='4'></td>
           <td><strong>Costo de envío:</strong></td>
-          <td>{{ cotizacion.costo_de_envio }}</td>
+          <td>S/ {{ cotizacion.costo_de_envio }}</td>
         </tr>
 
         <tr>
           <td colspan='4'></td>
           <td><strong>IGV:</strong></td>
-          <td>{{ cotizacion.igv }}</td>
+          <td>{{ cotizacion.igv }} %</td>
         </tr>
 
         <tr>
           <td colspan='4'></td>
           <td><strong>Total:</strong></td>
-          <td>{{ cotizacion.total }}</td>
+          <td>S/ {{ cotizacion.total }}</td>
         </tr>
         </tbody>
       </table>

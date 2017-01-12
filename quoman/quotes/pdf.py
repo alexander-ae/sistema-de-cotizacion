@@ -172,10 +172,17 @@ def draw_pdf(buffer, cotizacion):
     for i, producto in enumerate(cotizacion.productos_a_cotizar.all()):
         data.append([
             str(i + 1),
-            Paragraph('{}: {}'.format(producto.nombre, producto.detalle), s),
+            Paragraph(bold(producto.nombre), s),
             producto.cantidad,
             'S/ {}'.format(producto.precio),
             'S/ {}'.format(producto.subtotal)
+        ])
+        data.append([
+            '',
+            Paragraph(producto.detalle, s),
+            '',
+            '',
+            ''
         ])
 
     data.append(['', 'Nota: Los precios no incluyen IGV', '', Paragraph('<b>SubTotal</b>', styleR),
