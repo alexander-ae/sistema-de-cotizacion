@@ -156,6 +156,8 @@ def draw_pdf(buffer, cotizacion):
     styleTableEmpresa = TableStyle([
         ('ALIGN', (1, 0), (1, -1), 'LEFT'),
         ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 0),
+        ('TOPPADDING', (0, 0), (-1, -1), 3),
     ])
     tableEmpresa.setStyle(styleTableEmpresa)
 
