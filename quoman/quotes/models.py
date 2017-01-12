@@ -24,7 +24,7 @@ class Quote(models.Model):
     empresa_telefono = models.CharField('Teléfono de la empresa', max_length=32, blank=True)
 
     tiempo_de_entrega = models.CharField('Tiempo de Entrega', max_length=96, blank=True)
-    valida_hasta = models.DateTimeField('Válida hasta', blank=True, null=True)
+    valida_hasta = models.DateField('Válida hasta', blank=True, null=True)
     forma_de_pago = models.TextField('Forma de pago', max_length=120)
     costo_de_envio = models.DecimalField('Costo de envío', max_digits=6, decimal_places=2, default=0)
     total = models.DecimalField('Total', max_digits=9, decimal_places=2, default=0)
