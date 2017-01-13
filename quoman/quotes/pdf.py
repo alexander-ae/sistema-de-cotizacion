@@ -256,10 +256,12 @@ def envia_cotizacion(cotizacion):
         msg.send()
         return {
             'status_code': 200,
+            'str_status': 'success',
             'mensaje': 'El correo ha sido enviado'
         }
     except:
         return {
             'status_code': 503,
+            'str_status': 'error',
             'mensaje': 'El servicio de envío de correos tiene problemas'
         }

@@ -22,9 +22,11 @@ def quotes_list(request):
 
     if user.userprofile.rol == ROL_VENDEDOR:
         lista_cotizaciones = Quote.objects.filter(propietario_id=user
-                                                  ).order_by('-fecha_de_creacion', '-codigo').select_related('propietario_id__userprofile')
+                                                  ).order_by('-fecha_de_creacion', '-codigo').select_related(
+            'propietario_id__userprofile')
     elif user.userprofile.rol == ROL_ADMINISTRADOR or user.is_staff():
-        lista_cotizaciones = Quote.objects.order_by('-fecha_de_creacion', '-codigo').select_related('propietario_id__userprofile')
+        lista_cotizaciones = Quote.objects.order_by('-fecha_de_creacion', '-codigo').select_related(
+            'propietario_id__userprofile')
 
     return render(request, 'quotes/list.html', locals())
 
@@ -140,17 +142,25 @@ def quotes_pdf(request, codigo):
 @login_required
 def send_quote(request, codigo):
     data = {'status_code': 200}
-
-    # TODO: validar el usuario que intenta enviar el correo
+    usuario = request.user
 
     try:
         cotizacion = Quote.objects.get(codigo=codigo)
     except Quote.DoesNotExist:
         data['mensaje'] = 'No existe la cotización buscada'
+        data['str_status'] = 'error'
         return JsonResponse(data, status_code=404)
 
+    # validación del usuario
+    if cotizacion.propietario_id != usuario and cotizacion.propietario_id.is_superuser:
+        data['mensaje'] = 'No cuenta con permisos para enviar esta cotización'
+        data['str_status'] = 'error'
+        return JsonResponse(data, status_code=403)
+
+    # validación del estado de envío
     if cotizacion.estado != COTIZACION_PENDIENTE:
         data['status_code'] = 409
+        data['str_status'] = 'info'
         data['mensaje'] = 'La cotización ya ha sido enviada'
     else:
         respuesta = envia_cotizacion(cotizacion)

@@ -269,22 +269,23 @@
           $('.btn-send-mail').click(function (ev) {
               ev.preventDefault();
 
-              $.ajax({
-                  url: '{{ cotizacion.get_send_url }}'
-              })
-                  .done(function (data, status) {
-                      console.log(data);
-                      console.log('status:' + data.status_code + ' :: ' +  typeof(data.status_code));
-
-                      if(data.status_code == '200'){
-                          swal('Todo conforme', 'Se ha enviado el correo', 'success');
-                      }
-                      if(data.status_code == 404){
-                          swal('Hay un problema', 'La cotización no existe !', 'error');
-                      }
-                  });
-          })
-
+              swal({
+                      title: 'Envío de la cotización',
+                      text: 'Confirme el envío por correo.',
+                      type: 'info',
+                      showCancelButton: true,
+                      closeOnConfirm: false,
+                      showLoaderOnConfirm: true,
+                  },
+                  function () {
+                      $.ajax({
+                          url: '{{ cotizacion.get_send_url }}'
+                      })
+                          .done(function (data) {
+                              swal(data.mensaje, data.str_status);
+                          });
+                  })
+          });
       })
   </script>
 {% endblock %}
