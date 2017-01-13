@@ -251,7 +251,6 @@ def envia_cotizacion(cotizacion):
     draw_pdf(buffer, cotizacion)
 
     msg.attach('cotizacion.pdf', buffer.getvalue(), 'application/pdf')
-    msg.send()
 
     try:
         msg.send()

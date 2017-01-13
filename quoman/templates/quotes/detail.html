@@ -21,7 +21,7 @@
     <div class="col-md-12 col-sm-12">
       <div class="box">
         <div class="box-body">
-          <a href='{{ cotizacion.get_send_url }}' class='btn btn-primary' target='_blank'>
+          <a class='btn btn-primary btn-send-mail' target='_blank'>
             <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
             Enviar cotización
           </a>
@@ -262,3 +262,29 @@
     </div>
   </div>
 {% endblock content %}
+
+{% block js %}
+  <script>
+      $(function () {
+          $('.btn-send-mail').click(function (ev) {
+              ev.preventDefault();
+
+              $.ajax({
+                  url: '{{ cotizacion.get_send_url }}'
+              })
+                  .done(function (data, status) {
+                      console.log(data);
+                      console.log('status:' + data.status_code + ' :: ' +  typeof(data.status_code));
+
+                      if(data.status_code == '200'){
+                          swal('Todo conforme', 'Se ha enviado el correo', 'success');
+                      }
+                      if(data.status_code == 404){
+                          swal('Hay un problema', 'La cotización no existe !', 'error');
+                      }
+                  });
+          })
+
+      })
+  </script>
+{% endblock %}

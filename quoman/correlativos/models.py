@@ -3,7 +3,7 @@ from django.db import models
 CORRELATIVO_COTIZACION = '01'
 
 CORRELATIVO_LISTA = (
-    (CORRELATIVO_COTIZACION, 'Trabajador Portuario'),
+    (CORRELATIVO_COTIZACION, 'Cotizaciones'),
 )
 
 

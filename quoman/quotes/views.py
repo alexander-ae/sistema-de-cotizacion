@@ -141,6 +141,8 @@ def quotes_pdf(request, codigo):
 def send_quote(request, codigo):
     data = {'status_code': 200}
 
+    # TODO: validar el usuario que intenta enviar el correo
+
     try:
         cotizacion = Quote.objects.get(codigo=codigo)
     except Quote.DoesNotExist:
