@@ -13,7 +13,7 @@ class QuoteForm(forms.ModelForm):
 
     class Meta:
         model = Quote
-        fields = ('codigo', 'aplica_detraccion', 'ruc', 'empresa_razon_social', 'empresa_direccion', 'empresa_telefono',
+        fields = ('aplica_detraccion', 'ruc', 'empresa_razon_social', 'empresa_direccion', 'empresa_telefono',
                   'representante', 'tiempo_de_entrega', 'valida_hasta', 'forma_de_pago', 'costo_de_envio')
 
 

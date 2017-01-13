@@ -12,6 +12,8 @@ from .utils import pdf_response
 from quoman.models import Config
 from quoman.helpers import DefaultFormHelper
 from users.constants import ROL_VENDEDOR, ROL_ADMINISTRADOR
+from correlativos.utils import genera_codigo
+from correlativos.models import CORRELATIVO_COTIZACION
 
 
 @login_required
@@ -20,9 +22,9 @@ def quotes_list(request):
 
     if user.userprofile.rol == ROL_VENDEDOR:
         lista_cotizaciones = Quote.objects.filter(propietario_id=user
-                                                  ).order_by('codigo').select_related('propietario_id__userprofile')
+                                                  ).order_by('-fecha_de_creacion', '-codigo').select_related('propietario_id__userprofile')
     elif user.userprofile.rol == ROL_ADMINISTRADOR or user.is_staff():
-        lista_cotizaciones = Quote.objects.order_by('codigo').select_related('propietario_id__userprofile')
+        lista_cotizaciones = Quote.objects.order_by('-fecha_de_creacion', '-codigo').select_related('propietario_id__userprofile')
 
     return render(request, 'quotes/list.html', locals())
 
@@ -41,6 +43,7 @@ def quotes_new(request):
         if form.is_valid() and quoteReceiverFormSet.is_valid() and quoteProductFormSet.is_valid():
             cotizacion = form.save(commit=False)
             cotizacion.propietario_id = usuario
+            cotizacion.codigo = genera_codigo(CORRELATIVO_COTIZACION)
             cotizacion.igv = config.igv
             cotizacion.save()
 

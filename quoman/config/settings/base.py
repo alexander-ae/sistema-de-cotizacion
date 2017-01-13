@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'quoman',
     'users',
+    'correlativos',
     'products',
     'quotes',
 ]
